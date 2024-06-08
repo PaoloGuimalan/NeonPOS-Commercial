@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
     "dev:vite": "vite",
-    "dev:electron": "npm run build:electron && electron .",
+    "dev:electron": "yarn run build:electron && electron .",
     "build": "npm run build:vite && npm run build:electron",
     "build:vite": "vite build",
     "build:electron": "tsc -p electron",
