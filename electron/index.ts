@@ -38,6 +38,7 @@ function createWindow() {
   // and load the index.html of the app.
   if (isDev) {
     window?.loadURL(url);
+    window.webContents.openDevTools();
     setTimeout(() => {
       window.reload();
       window.webContents
