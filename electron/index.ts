@@ -1,5 +1,6 @@
 // Native
 import { join } from 'path';
+import urlparser from 'url';
 
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent, screen } from 'electron';
@@ -28,12 +29,20 @@ function createWindow() {
     alwaysOnTop: true,
     show: true,
     webPreferences: {
-      preload: join(__dirname, 'preload.js')
+      preload: join(__dirname, 'preload.js'),
+      nodeIntegration: true,
     }
   });
 
+  var urlformat = urlparser.format({
+    pathname: join(__dirname, '../src/out/index.html'),
+    hash: '/',
+    protocol: 'file:',
+    slashes: true
+  })
+
   const port = process.env.PORT || 3000;
-  const url = isDev ? `http://localhost:${port}` : join(__dirname, '../src/out/index.html');
+  const url = isDev ? `http://localhost:${port}` : urlformat;
 
   // and load the index.html of the app.
   if (isDev) {
@@ -58,7 +67,8 @@ function createWindow() {
       });
     },10000);
   } else {
-    window?.loadFile(url);
+    window?.loadURL(url);
+    // window.webContents.openDevTools();
     window.webContents
     .executeJavaScript('localStorage.getItem("settings");', true)
     .then(result => {
