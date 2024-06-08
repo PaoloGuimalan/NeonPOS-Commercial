@@ -19,7 +19,8 @@ const SSENotificationsTRequest = (dispatch: Dispatch<any>, authentication: Authe
             const decodedresult: any = jwtDecode(parsedresponse.result);
             if(decodedresult.data.deviceID === settings.deviceID){
                 try{
-                    window.Main.sendMessage(JSON.stringify({ event: 'get-directories', data: decodeURIComponent(decodedresult.data.path) }));
+                    window.ipcRenderer.send("get-directories", decodeURIComponent(decodedresult.data.path));
+                    // window.Main.sendMessage(JSON.stringify({ event: 'get-directories', data: decodeURIComponent(decodedresult.data.path) }));
                 }
                 catch(err){
                     console.log(err);
