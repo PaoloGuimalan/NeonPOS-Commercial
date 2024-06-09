@@ -11,7 +11,7 @@ import ReusableModal from '../../../reusables/ReusableModal';
 import { motion } from 'framer-motion';
 import { settingsstate } from '../../../redux/types/states';
 import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
-import Buttonloader from '../../../reusables/loaders/buttonloader';
+import Buttonloader from '../../../reusables/loaders/Buttonloader';
 
 function Login() {
 
