@@ -136,7 +136,7 @@ function App() {
       <Routes>
         <Route path='/*' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Home /> : <Navigate to="/login" /> : <Splash /> : <Navigate to="/setup" />} />
         <Route path='/setup/*' element={isSettingsDone ? <Navigate to="/" /> : <Setup />} />
-        <Route path='/login' element={authentication.auth !== null ? authentication.auth ? <Navigate to="/" /> : <Login /> : <Navigate to="/" />} />
+        <Route path='/login' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Navigate to="/" /> : <Login /> : <Navigate to="/" /> : <Navigate to="/" />} />
       </Routes>
     </div>
   );
