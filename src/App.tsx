@@ -11,6 +11,7 @@ import Setup from './app/screens/setup/Setup';
 import Alert from './app/reusables/widgets/Alert';
 import Login from './app/screens/internal/Auth/Login';
 import Home from './app/screens/internal/Home/Home';
+import ExternalContainer from './app/screens/external/ExternalContainer';
 
 function App() {
   const authentication: AuthenticationInterface = useSelector((state: any) => state.authentication);
@@ -134,9 +135,10 @@ function App() {
         })}
       </div>
       <Routes>
-        <Route path='/*' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Home /> : <Navigate to="/login" /> : <Splash /> : <Navigate to="/setup" />} />
-        <Route path='/setup/*' element={isSettingsDone ? <Navigate to="/" /> : <Setup />} />
-        <Route path='/login' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Navigate to="/" /> : <Login /> : <Navigate to="/" /> : <Navigate to="/" />} />
+        <Route path='/app/*' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Home /> : <Navigate to="/login" /> : <Splash /> : <Navigate to="/setup" />} />
+        <Route path='/setup/*' element={isSettingsDone ? <Navigate to="/app" /> : <Setup />} />
+        <Route path='/login' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Navigate to="/app" /> : <Login /> : <Navigate to="/app" /> : <Navigate to="/app" />} />
+        <Route path='/external/*' element={<ExternalContainer />} />
       </Routes>
     </div>
   );

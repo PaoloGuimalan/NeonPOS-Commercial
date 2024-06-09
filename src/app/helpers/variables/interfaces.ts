@@ -115,6 +115,7 @@ export interface SettingsInterface {
     deviceID: string;
     connectionToken: string;
     setup: string;
+    posType?: string;
 }
 
 export interface InvoiceInterface {

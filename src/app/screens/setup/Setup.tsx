@@ -11,7 +11,7 @@ function Setup() {
   useEffect(() => {
     setTimeout(() => {
         setisLoaded(true);
-    },8000);
+    },10000);
   },[]);
 
   return (

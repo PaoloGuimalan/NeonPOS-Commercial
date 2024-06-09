@@ -1,10 +1,13 @@
 // Native
 import { join } from 'path';
 import urlparser from 'url';
+import os from "os";
+import fs from 'fs';
 
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent, screen } from 'electron';
 import isDev from 'electron-is-dev';
+import { exec } from 'child_process';
 
 var externalWindow: Electron.BrowserWindow | null = null;
 var receiptWindow: Electron.BrowserWindow | null = null;
@@ -36,13 +39,13 @@ function createWindow() {
 
   var urlformat = urlparser.format({
     pathname: join(__dirname, '../src/out/index.html'),
-    hash: '/',
+    hash: '/app',
     protocol: 'file:',
     slashes: true
   })
 
   const port = process.env.PORT || 3000;
-  const url = isDev ? `http://localhost:${port}` : urlformat;
+  const url = isDev ? `http://localhost:${port}/#/app` : urlformat;
 
   // and load the index.html of the app.
   if (isDev) {
@@ -158,11 +161,19 @@ function createWindow() {
       receiptWindow.on("close", () => {
         receiptWindow = null;
       });
+
+      var receipturl = urlparser.format({
+        pathname: join(__dirname, '../src/out/index.html'),
+        hash: '/external/receipt',
+        protocol: 'file:',
+        slashes: true
+      });
+
       if (!isDev) {
         // mainWindow.webContents.openDevTools()
-        await receiptWindow.loadURL('app://./external/receipt')
+        await receiptWindow.loadURL(receipturl);
       } else {
-        await receiptWindow.loadURL(`http://localhost:${port}/external/receipt`)
+        await receiptWindow.loadURL(`http://localhost:${port}/#/external/receipt`)
         setTimeout(() => {
           if(receiptWindow){
             receiptWindow.reload();
@@ -193,11 +204,19 @@ function createWindow() {
       generateReportWindow.on("close", () => {
         generateReportWindow = null;
       });
+
+      var generateurl = urlparser.format({
+        pathname: join(__dirname, '../src/out/index.html'),
+        hash: '/external/generatereport',
+        protocol: 'file:',
+        slashes: true
+      });
+
       if (!isDev) {
         // mainWindow.webContents.openDevTools()
-        await generateReportWindow.loadURL('app://./external/generatereport')
+        await generateReportWindow.loadURL(generateurl)
       } else {
-        await generateReportWindow.loadURL(`http://localhost:${port}/external/generatereport`)
+        await generateReportWindow.loadURL(`http://localhost:${port}/#/external/generatereport`)
         setTimeout(() => {
           if(generateReportWindow){
             generateReportWindow.reload();
@@ -225,12 +244,19 @@ function createWindow() {
             nodeIntegration: true,
           },
         })
+
+        var invoiceurl = urlparser.format({
+          pathname: join(__dirname, '../src/out/index.html'),
+          hash: '/external/invoice',
+          protocol: 'file:',
+          slashes: true
+        });
   
         if (!isDev) {
           // mainWindow.webContents.openDevTools()
-          await externalWindow.loadURL('app://./external/external')
+          await externalWindow.loadURL(invoiceurl);
         } else {
-          await externalWindow.loadURL(`http://localhost:${port}/external/external`)
+          await externalWindow.loadURL(`http://localhost:${port}/#/external/invoice`)
           setTimeout(() => {
             if(externalWindow){
               externalWindow.reload();
@@ -241,6 +267,335 @@ function createWindow() {
       }
     }
   })
+
+  ipcMain.on('restart-report-window', async () => {
+    try{
+      if(generateReportWindow){
+        console.log("GENERATE WINDOW CL ST: ", generateReportWindow.isClosable());
+        if(generateReportWindow.isClosable()){
+          generateReportWindow.close();
+        }
+        generateReportWindow = null;
+        generateReportWindow = new BrowserWindow({
+          // kiosk: true,
+          title: 'generate_report',
+          width: 300,
+          height: 0,
+          frame: false,
+          skipTaskbar: true,
+          fullscreen: false,
+          x: 0,
+          y: height + 30,
+          resizable: false,
+          // alwaysOnTop: true,
+          webPreferences: {
+            preload: join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+          },
+        })
+        generateReportWindow.on("close", () => {
+          generateReportWindow = null;
+        });
+        
+        var generateurl = urlparser.format({
+          pathname: join(__dirname, '../src/out/index.html'),
+          hash: '/external/generatereport',
+          protocol: 'file:',
+          slashes: true
+        });
+  
+        if (!isDev) {
+          // mainWindow.webContents.openDevTools()
+          await generateReportWindow.loadURL(generateurl)
+        } else {
+          await generateReportWindow.loadURL(`http://localhost:${port}/#/external/generatereport`)
+          setTimeout(() => {
+            if(generateReportWindow){
+              generateReportWindow.reload();
+            }
+          },10000);
+          // mainWindow.webContents.openDevTools()
+        }
+      }
+      else{
+        generateReportWindow = new BrowserWindow({
+          // kiosk: true,
+          title: 'generate_report',
+          width: 300,
+          height: 0,
+          frame: false,
+          skipTaskbar: true,
+          fullscreen: false,
+          x: 0,
+          y: height + 30,
+          resizable: false,
+          // alwaysOnTop: true,
+          webPreferences: {
+            preload: join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+          },
+        })
+        generateReportWindow.on("close", () => {
+          generateReportWindow = null;
+        });
+        
+        var generateurl = urlparser.format({
+          pathname: join(__dirname, '../src/out/index.html'),
+          hash: '/external/generatereport',
+          protocol: 'file:',
+          slashes: true
+        });
+  
+        if (!isDev) {
+          // mainWindow.webContents.openDevTools()
+          await generateReportWindow.loadURL(generateurl)
+        } else {
+          await generateReportWindow.loadURL(`http://localhost:${port}/#/external/generatereport`)
+          setTimeout(() => {
+            if(generateReportWindow){
+              generateReportWindow.reload();
+            }
+          },10000);
+          // mainWindow.webContents.openDevTools()
+        }
+      }
+    }catch(ex){
+      console.log("GEN WINDOW ERR: ", ex);
+    }
+  })
+
+  ipcMain.on('restart-receipt-window', async () => {
+    try{
+      if(receiptWindow){
+        console.log("RECEIPT WINDOW: ", receiptWindow.isClosable());
+        if(receiptWindow.isClosable()){
+          receiptWindow.close();
+        }
+        receiptWindow = null;
+        receiptWindow = new BrowserWindow({
+          // kiosk: true,
+          title: 'receipt',
+          width: 300,
+          height: 0,
+          frame: false,
+          skipTaskbar: true,
+          fullscreen: false,
+          x: 0,
+          y: height + 30,
+          resizable: false,
+          // alwaysOnTop: true,
+          webPreferences: {
+            preload: join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+          },
+        })
+        receiptWindow.on("close", () => {
+          receiptWindow = null;
+        });
+        
+        var receipturl = urlparser.format({
+          pathname: join(__dirname, '../src/out/index.html'),
+          hash: '/external/receipt',
+          protocol: 'file:',
+          slashes: true
+        });
+  
+        if (!isDev) {
+          // mainWindow.webContents.openDevTools()
+          await receiptWindow.loadURL(receipturl);
+        } else {
+          await receiptWindow.loadURL(`http://localhost:${port}/#/external/receipt`)
+          setTimeout(() => {
+            if(receiptWindow){
+              receiptWindow.reload();
+            }
+          },10000);
+          // mainWindow.webContents.openDevTools()
+        }
+      }
+      else{
+        receiptWindow = new BrowserWindow({
+          // kiosk: true,
+          title: 'receipt',
+          width: 300,
+          height: 0,
+          frame: false,
+          skipTaskbar: true,
+          fullscreen: false,
+          x: 0,
+          y: height + 30,
+          resizable: false,
+          // alwaysOnTop: true,
+          webPreferences: {
+            preload: join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+          },
+        })
+        receiptWindow.on("close", () => {
+          receiptWindow = null;
+        });
+        
+        var receipturl = urlparser.format({
+          pathname: join(__dirname, '../src/out/index.html'),
+          hash: '/external/receipt',
+          protocol: 'file:',
+          slashes: true
+        });
+  
+        if (!isDev) {
+          // mainWindow.webContents.openDevTools()
+          await receiptWindow.loadURL(receipturl);
+        } else {
+          await receiptWindow.loadURL(`http://localhost:${port}/#/external/receipt`)
+          setTimeout(() => {
+            if(receiptWindow){
+              receiptWindow.reload();
+            }
+          },10000);
+          // mainWindow.webContents.openDevTools()
+        }
+      }
+    }catch(ex){
+      console.log("REC WINDOW ERR: ", ex);
+    }
+  })
+
+  ipcMain.on('ready-print', async (_, command) => {
+    if(receiptWindow){
+      receiptWindow.webContents.send('receipt-output', command);
+    }
+  })
+
+  ipcMain.on('ready-generate', async (_, command) => {
+    if(generateReportWindow){
+      generateReportWindow.webContents.send('report-output', command);
+    }
+  })
+
+  ipcMain.on('print-receipt', async () => {
+    if(receiptWindow){
+      console.log("Printing");
+      receiptWindow.webContents.print({});
+    }
+  });
+
+  ipcMain.on('print-report', async () => {
+    if(generateReportWindow){
+      console.log("Printing");
+      generateReportWindow.webContents.print({});
+    }
+  });
+
+  ipcMain.on('close-external', async () => {
+    if(window){
+      window.webContents
+      .executeJavaScript('localStorage.getItem("settings");', true)
+      .then(result => {
+        const ls = JSON.parse(result);
+        if(ls){
+          if(ls.setup === "Portable"){
+            window.setSkipTaskbar(false);
+            window.setAlwaysOnTop(false);
+          }
+          else if(ls.setup === "POS"){
+            // window.setSkipTaskbar(true);
+            window.setAlwaysOnTop(true);
+          }
+        }
+      });
+    }
+
+    if(externalWindow){
+      externalWindow.close();
+      externalWindow = null;
+    }
+
+    if(receiptWindow){
+      receiptWindow.close();
+      receiptWindow = null;
+    }
+
+    if(generateReportWindow){
+      generateReportWindow.close();
+      generateReportWindow = null;
+    }
+  });
+
+  // Listen for user input
+  ipcMain.on('display-invoice', (_, command) => {
+    if(externalWindow){
+      externalWindow.webContents.send('receive-invoice', command);
+    }
+  })
+  
+  ipcMain.on('execute-command', (_, command) => {
+    executeCommand(command)
+      .then(output => {
+        window.webContents.send('command-output', output);
+      })
+      .catch(error => {
+        window.webContents.send('command-error', error.message);
+      });
+  });
+
+  ipcMain.on('execute-command-w-dir', (_, command) => {
+    const parsedcommand = JSON.parse(command);
+    executeCommandWDir(parsedcommand.cmd, parsedcommand.dir)
+      .then(output => {
+        window.webContents.send('command-output', output);
+      })
+      .catch(error => {
+        window.webContents.send('command-error', error.message);
+      });
+  });
+
+  ipcMain.on('get-directories', (_, command) => {
+    try{
+      if(command.trim() === ""){
+        const defaultpath = os.platform() === "linux" ? "\\" : "C:\\";
+        const result = fs.readdirSync(defaultpath, { withFileTypes: true });
+        const directories = result.filter((flt) => flt.isDirectory()).map((mp) => `${defaultpath}\\${mp.name}`);
+        const files = result.filter((flt) => !flt.isDirectory()).map((mp) => `${defaultpath}\\${mp.name}`);
+        // console.log({ path: defaultpath, dirs: directories, files: files });
+        window.webContents.send('get-directories-output', JSON.stringify({ path: defaultpath, dirs: directories, files: files }));
+      }
+      else{
+        const result = fs.readdirSync(command, { withFileTypes: true });
+        const directories = result.filter((flt) => flt.isDirectory()).map((mp) => `${command}\\${mp.name}`);
+        const files = result.filter((flt) => !flt.isDirectory()).map((mp) => `${command}\\${mp.name}`);
+        // console.log({ path: command, dirs: directories, files: files });
+        window.webContents.send('get-directories-output', JSON.stringify({ path: command, dirs: directories, files: files }));
+      }
+    }
+    catch(ex){
+      window.webContents.send('get-directories-error', `Error Get Directories: ${ex}`);
+    }
+  });
+
+  // Function to execute shell commands
+  function executeCommand(command: any) {
+    return new Promise((resolve, reject) => {
+      exec(command, (error, stdout, _) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+  }
+
+  function executeCommandWDir(command: any, dir: any) {
+    return new Promise((resolve, reject) => {
+      exec(command, { cwd: dir }, (error, stdout, _) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+  }
 }
 
 // This method will be called when Electron has finished

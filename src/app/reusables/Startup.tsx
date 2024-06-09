@@ -26,7 +26,7 @@ function Startup() {
             }}
             transition={{
                 delay: easeIn ? 0 : 1,
-                duration: easeIn ? 1 : 2,
+                duration: easeIn ? 2 : 4,
                 ease: "circInOut"
             }}
             className='w-[95%] h-[95%] max-w-[700px] rounded-[10px] overflow-y-hidden'>

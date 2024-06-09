@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import NeonPOS from '../../../../assets/NeonPOS.png'
 import NeonPOSSVG from '../../../../assets/NeonPOS_BG.svg'
 import { useDispatch, useSelector } from 'react-redux';
-import { dispatchclearalerts, dispatchnewalert } from '../../../helpers/utils/alertdispatching';
+import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { InitialSetupDeviceVerificationRequest } from '../../../helpers/http/requests';
 import { MdClose, MdSettings } from 'react-icons/md'
 import { AlertsItem } from '../../../helpers/variables/interfaces'
@@ -16,6 +16,7 @@ function Formtab() {
   const [NSDVCID, setNSDVCID] = useState<string>("");
   const [connectionToken, setconnectionToken] = useState<string>("");
   const [SetupType, setSetupType] = useState<string>("POS");
+  const [POSType, setPOSType] = useState<string>("none");
 
   const [isVerifying, setisVerifying] = useState<boolean>(false);
 
@@ -25,7 +26,7 @@ function Formtab() {
   const dispatch = useDispatch();
 
   const VerifyCredentials = () => {
-    if(NSUSRID.trim() !== "" && NSDVCID.trim() !== "" && connectionToken.trim() !== ""){
+    if(NSUSRID.trim() !== "" && NSDVCID.trim() !== "" && connectionToken.trim() !== "" && POSType.trim() !== "none"){
         setisVerifying(true);
         InitialSetupDeviceVerificationRequest({
             userID: NSUSRID,
@@ -38,7 +39,8 @@ function Formtab() {
                     userID: NSUSRID,
                     deviceID: NSDVCID,
                     connectionToken: connectionToken,
-                    setup: SetupType
+                    setup: SetupType,
+                    posType: POSType,
                 }));
                 dispatch({
                   type: SET_SETTINGS,
@@ -47,12 +49,12 @@ function Formtab() {
                         userID: NSUSRID,
                         deviceID: NSDVCID,
                         connectionToken: connectionToken,
-                        setup: SetupType
+                        setup: SetupType,
+                        posType: POSType,
                     }
                   }
                 });
                 window.ipcRenderer.send("setup-type-reload", SetupType);
-                dispatchclearalerts(dispatch);
             }
             else{
                 setisVerifying(false);
@@ -126,13 +128,13 @@ function Formtab() {
                     maxHeight: "0px"
                 }}
                 animate={{
-                    maxHeight: "660px"
+                    maxHeight: "720px"
                 }}
                 transition={{
                     delay: 1,
                     duration: 1
                 }}
-                className='border-[1px] bg-white w-[95%] h-[95%] max-w-[700px] shadow-md rounded-[10px] overflow-y-hidden'>
+                className='border-[1px] bg-white w-[95%] h-[95%] max-w-[700px] shadow-md rounded-[10px] overflow-y-auto '>
                     <div className='w-full h-full p-[25px] flex flex-col gap-[10px]'>
                         <div className='w-full flex flex-row'>
                             <img src={NeonPOS.src} className='h-[60px]' />
@@ -166,7 +168,18 @@ function Formtab() {
                                         <option value="Portable">Portable</option>
                                     </select>
                                 </div>
-                                <div className='flex flex-flex w-full gap-[5px] pt-[10px]'>
+                                <div className='flex flex-col w-full gap-[5px]'>
+                                    <span className='text-[12px] font-Inter font-semibold'>POS Type</span>
+                                    <select value={POSType} onChange={(e) => { setPOSType(e.target.value) }} className='font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]'>
+                                        <option defaultChecked value="none">-- Select a POS Type --</option>
+                                        <option value="fast_food">Fast Food</option>
+                                        <option value="restaurant">Restaurant</option>
+                                        <option value="convenience_store">Convenience Store</option>
+                                        <option value="market">Market</option>
+                                        <option value="retail">Retail</option>
+                                    </select>
+                                </div>
+                                <div className='flex flex-flex w-full gap-[5px] pt-[10px] pb-[10px]'>
                                     <button disabled={isVerifying} onClick={VerifyCredentials} className='flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]'>
                                         <span className='text-[12px]'>{isVerifying ? "...Verifying Credentials" : "Verify and Confirm"}</span>
                                     </button>

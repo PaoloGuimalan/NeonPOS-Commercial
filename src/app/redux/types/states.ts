@@ -23,5 +23,6 @@ export const settingsstate : SettingsInterface = {
     userID: "",
     deviceID: "",
     setup: "",
+    posType: "",
     connectionToken: ""
 }
