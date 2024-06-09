@@ -47,7 +47,7 @@ function createWindow() {
   // and load the index.html of the app.
   if (isDev) {
     window?.loadURL(url);
-    // window.webContents.openDevTools();
+    window.webContents.openDevTools();
     setTimeout(() => {
       window.reload();
       window.webContents
@@ -60,7 +60,7 @@ function createWindow() {
             window.setAlwaysOnTop(false);
           }
           else if(ls.setup === "POS"){
-            window.setSkipTaskbar(true);
+            // window.setSkipTaskbar(true);
             window.setAlwaysOnTop(true);
           }
         }
@@ -79,7 +79,7 @@ function createWindow() {
           window.setAlwaysOnTop(false);
         }
         else if(ls.setup === "POS"){
-          window.setSkipTaskbar(true);
+          // window.setSkipTaskbar(true);
           window.setAlwaysOnTop(true);
         }
       }
@@ -111,7 +111,7 @@ function createWindow() {
           window.setAlwaysOnTop(false);
         }
         else if(command === "POS"){
-          window.setSkipTaskbar(true);
+          // window.setSkipTaskbar(true);
           window.setAlwaysOnTop(true);
         }
       }
@@ -130,7 +130,7 @@ function createWindow() {
             window.setAlwaysOnTop(false);
           }
           else if(ls.setup === "POS"){
-            window.setSkipTaskbar(true);
+            // window.setSkipTaskbar(true);
             window.setAlwaysOnTop(true);
           }
         }
@@ -144,7 +144,7 @@ function createWindow() {
         width: 300,
         height: 0,
         frame: false,
-        skipTaskbar: true,
+        // skipTaskbar: true,
         fullscreen: false,
         x: 0,
         y: height + 30,
@@ -179,7 +179,7 @@ function createWindow() {
         width: 300,
         height: 0,
         frame: false,
-        skipTaskbar: true,
+        // skipTaskbar: true,
         fullscreen: false,
         x: 0,
         y: height + 30,
@@ -215,7 +215,7 @@ function createWindow() {
           width: width,
           height: height,
           frame: false,
-          skipTaskbar: true,
+          // skipTaskbar: true,
           fullscreen: false,
           alwaysOnTop: true,
           x: externalDisplay.bounds.x,

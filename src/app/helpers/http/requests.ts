@@ -14,6 +14,18 @@ async function LoginRequest(payload: LoginPayloadInterface){
     })
 }
 
+async function RefreshAuthRequest(token: string){
+  return await Axios.get(`${BACKDOOR}/api/auth/rfsh`, {
+    headers: {
+      "x-access-token": token
+    }
+  }).then((response) => {
+    return response;
+  }).catch((err) => {
+    throw new Error(err);
+  })
+}
+
 async function GetPermissionsRequest(userID: string){
   return await Axios.get(`${BACKDOOR}/api/settings/getpermissions/${userID}`).then((response) => {
     return response;
@@ -177,6 +189,7 @@ async function CloseOrderRequestV2(payload: CloseOrderInterface) {
 
 export {
     LoginRequest,
+    RefreshAuthRequest,
     RegisterAccountRequest,
     GetPermissionsRequest,
     CreateNewPermissionRequest,
