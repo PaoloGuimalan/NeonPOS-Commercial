@@ -61,6 +61,7 @@ function App() {
 
     if(settingsstorage){
       if(!isSettingsDone){
+        window.ipcRenderer.send("open-printables", "");
         if(JSON.parse(settingsstorage).setup === "POS"){
           window.ipcRenderer.send("enable-external", JSON.parse(settingsstorage).setup);
         }
@@ -73,7 +74,7 @@ function App() {
   }, [settings]);
 
   useEffect(() => {
-    const authenticationtoken = localStorage.getItem("authtoken");
+    const authenticationtoken = localStorage.getItem("authentication");
     if(authenticationtoken){
       RefreshAuthRequest(authenticationtoken).then((response) => {
         if(response.data.status){

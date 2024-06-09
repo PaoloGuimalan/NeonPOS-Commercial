@@ -121,25 +121,7 @@ function createWindow() {
     }
   })
 
-  ipcMain.on('enable-external', async (__, ___) => {
-    if(window){
-      window.webContents
-      .executeJavaScript('localStorage.getItem("settings");', true)
-      .then(result => {
-        const ls = JSON.parse(result);
-        if(ls){
-          if(ls.setup === "Portable"){
-            window.setSkipTaskbar(false);
-            window.setAlwaysOnTop(false);
-          }
-          else if(ls.setup === "POS"){
-            // window.setSkipTaskbar(true);
-            window.setAlwaysOnTop(true);
-          }
-        }
-      });
-    }
-
+  ipcMain.on('open-printables', async () => {
     if(!receiptWindow){
       receiptWindow = new BrowserWindow({
         // kiosk: true,
@@ -225,6 +207,26 @@ function createWindow() {
         // mainWindow.webContents.openDevTools()
       }
     }
+  })
+
+  ipcMain.on('enable-external', async (__, ___) => {
+    if(window){
+      window.webContents
+      .executeJavaScript('localStorage.getItem("settings");', true)
+      .then(result => {
+        const ls = JSON.parse(result);
+        if(ls){
+          if(ls.setup === "Portable"){
+            window.setSkipTaskbar(false);
+            window.setAlwaysOnTop(false);
+          }
+          else if(ls.setup === "POS"){
+            // window.setSkipTaskbar(true);
+            window.setAlwaysOnTop(true);
+          }
+        }
+      });
+    }
 
     if(!externalWindow){
       if(externalDisplay){
@@ -282,7 +284,7 @@ function createWindow() {
           width: 300,
           height: 0,
           frame: false,
-          skipTaskbar: true,
+          // skipTaskbar: true,
           fullscreen: false,
           x: 0,
           y: height + 30,
@@ -324,7 +326,7 @@ function createWindow() {
           width: 300,
           height: 0,
           frame: false,
-          skipTaskbar: true,
+          // skipTaskbar: true,
           fullscreen: false,
           x: 0,
           y: height + 30,
@@ -378,7 +380,7 @@ function createWindow() {
           width: 300,
           height: 0,
           frame: false,
-          skipTaskbar: true,
+          // skipTaskbar: true,
           fullscreen: false,
           x: 0,
           y: height + 30,
@@ -420,7 +422,7 @@ function createWindow() {
           width: 300,
           height: 0,
           frame: false,
-          skipTaskbar: true,
+          // skipTaskbar: true,
           fullscreen: false,
           x: 0,
           y: height + 30,

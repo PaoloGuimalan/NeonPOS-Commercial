@@ -41,19 +41,20 @@ function Login() {
       setisLoggingIn(false);
       if(response.data.status){
         if(response.data.result){
-          const permissionsmapper = response.data.result[0].permissions.map((mp: any) => mp.permissionType);
+          // const permissionsmapper = response.data.result[0].permissions.map((mp: any) => mp.permissionType);
+          // alert(JSON.stringify(response.data.result.data, null, 4))
           if(saveSession){
             const currentaccountsession = localStorage.getItem("account_sessions");
             if(currentaccountsession){
               const parsedcurraccountsessions: SavedAccountSessionsInterface[] = JSON.parse(currentaccountsession);
               if(parsedcurraccountsessions.length > 0){
                 const accIDChecker = parsedcurraccountsessions.map((mp: SavedAccountSessionsInterface) => mp.accountID);
-                if(!accIDChecker.includes(response.data.result[0].accountID)){
+                if(!accIDChecker.includes(response.data.result.data.accountID)){
                   const JsonConvertedsessions = JSON.stringify([
                     ...parsedcurraccountsessions,
                     {
-                      accountID: response.data.result[0].accountID,
-                      accountName: response.data.result[0].accountName,
+                      accountID: response.data.result.data.accountID,
+                      accountName: response.data.result.data.accountName,
                       deviceID: settings.deviceID,
                       userID: settings.userID
                     }
@@ -61,12 +62,12 @@ function Login() {
                   localStorage.setItem("account_sessions", JsonConvertedsessions);
                 }
                 else{
-                  const parsedaccsessionsnoncurrent = parsedcurraccountsessions.filter((flt) => flt.accountID !== response.data.result[0].accountID)
+                  const parsedaccsessionsnoncurrent = parsedcurraccountsessions.filter((flt) => flt.accountID !== response.data.result.data.accountID)
                   const JsonConvertedsessions = JSON.stringify([
                     ...parsedaccsessionsnoncurrent,
                     {
-                      accountID: response.data.result[0].accountID,
-                      accountName: response.data.result[0].accountName,
+                      accountID: response.data.result.data.accountID,
+                      accountName: response.data.result.data.accountName,
                       deviceID: settings.deviceID,
                       userID: settings.userID
                     }
@@ -77,8 +78,8 @@ function Login() {
               else{
                 const JsonConvertedsessions = JSON.stringify([
                   {
-                    accountID: response.data.result[0].accountID,
-                    accountName: response.data.result[0].accountName,
+                    accountID: response.data.result.data.accountID,
+                    accountName: response.data.result.data.accountName,
                     deviceID: settings.deviceID,
                     userID: settings.userID
                   }
@@ -89,8 +90,8 @@ function Login() {
             else{
               const JsonConvertedsessions = JSON.stringify([
                 {
-                  accountID: response.data.result[0].accountID,
-                  accountName: response.data.result[0].accountName,
+                  accountID: response.data.result.data.accountID,
+                  accountName: response.data.result.data.accountName,
                   deviceID: settings.deviceID,
                   userID: settings.userID
                 }
@@ -104,18 +105,13 @@ function Login() {
               authentication: {
                 auth: true,
                 user: {
-                  ...response.data.result[0],
-                  permissions: permissionsmapper
+                  ...response.data.result.data,
+                  // permissions: permissionsmapper
                 }
               }
             }
           })
-          localStorage.setItem("authentication", JSON.stringify({
-            user: {
-              ...response.data.result[0],
-              permissions: permissionsmapper
-            }
-          }))
+          localStorage.setItem("authentication", response.data.result.authtoken);
           dispatchnewalert(dispatch, "success", "Successfully logged in");
           return;
         }
