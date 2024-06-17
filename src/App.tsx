@@ -1,48 +1,41 @@
 import React, { useEffect, useRef, useState } from 'react';
-import AppBar from './AppBar';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Splash from './app/reusables/Splash';
 import { AlertsItem, AuthenticationInterface, SettingsInterface } from './app/helpers/variables/interfaces';
-import { useDispatch, useSelector } from 'react-redux';
 import { SET_AUTHENTICATION, SET_SETTINGS } from './app/redux/types/types';
-import { RefreshAuthRequest } from './app/helpers/http/requests';
 import { authenticationstate } from './app/redux/types/states';
 import Setup from './app/screens/setup/Setup';
 import Alert from './app/reusables/widgets/Alert';
 import Login from './app/screens/internal/Auth/Login';
 import Home from './app/screens/internal/Home/Home';
 import ExternalContainer from './app/screens/external/ExternalContainer';
+import { RootState } from './app/redux/store/store';
+import { DataService } from './app/helpers/http/dataService';
+import BACKDOOR from './app/lib/endpoints/Backdoor';
+import WelcomeBanner from './app/reusables/holders/WelcomeBanner';
 
 function App() {
-  const authentication: AuthenticationInterface = useSelector((state: any) => state.authentication);
-  const alerts: AlertsItem[] = useSelector((state: any) => state.alerts);
-  const settings: SettingsInterface = useSelector((state: any) => state.settings);
+  const authentication: AuthenticationInterface = useSelector((state: RootState) => state.authentication);
+  const alerts: AlertsItem[] = useSelector((state: RootState) => state.alerts);
+  const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
   const [isSettingsDone, setisSettingsDone] = useState<boolean | null>(null);
-  const [isAuthLoading, setisAuthLoading] = useState<boolean>(true);
-
   const scrollDivAlerts = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if(scrollDivAlerts.current){
-      const scrollHeight = scrollDivAlerts.current.scrollHeight;
-      const clientHeight = scrollDivAlerts.current.clientHeight;
-      const maxScrollTop = scrollHeight - clientHeight
+    if (scrollDivAlerts.current) {
+      const { scrollHeight, clientHeight } = scrollDivAlerts.current;
+      const maxScrollTop = scrollHeight - clientHeight;
       scrollDivAlerts.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
-  },[alerts, scrollDivAlerts]);
-
-  // useEffect(() => {
-  //   if(authentication.auth){
-  //     router.push("/internal/home/home");
-  //   }
-  // }, [authentication]);
+  }, [alerts, scrollDivAlerts]);
 
   useEffect(() => {
-    const settingsstorage = localStorage.getItem("settings");
+    const settingsstorage = localStorage.getItem('settings');
 
-    if(settingsstorage){
+    if (settingsstorage) {
       setisSettingsDone(true);
       dispatch({
         type: SET_SETTINGS,
@@ -50,56 +43,44 @@ function App() {
           settings: JSON.parse(settingsstorage)
         }
       });
-    }
-    else{
+    } else {
       setisSettingsDone(false);
     }
   }, []);
 
   useEffect(() => {
-    const settingsstorage = localStorage.getItem("settings");
+    const settingsstorage = localStorage.getItem('settings');
 
-    if(settingsstorage){
-      if(!isSettingsDone){
-        window.ipcRenderer.send("open-printables", "");
-        if(JSON.parse(settingsstorage).setup === "POS"){
-          window.ipcRenderer.send("enable-external", JSON.parse(settingsstorage).setup);
+    if (settingsstorage) {
+      if (!isSettingsDone) {
+        window.ipcRenderer.send('open-printables', '');
+        if (JSON.parse(settingsstorage).setup === 'POS') {
+          window.ipcRenderer.send('enable-external', JSON.parse(settingsstorage).setup);
         }
       }
       setisSettingsDone(true);
-    }
-    else{
+    } else {
       setisSettingsDone(false);
     }
   }, [settings]);
 
-  useEffect(() => {
-    const authenticationtoken = localStorage.getItem("authentication");
-    if(authenticationtoken){
-      RefreshAuthRequest(authenticationtoken).then((response) => {
-        if(response.data.status){
-          dispatch({
-            type: SET_AUTHENTICATION,
-            payload: {
-              authentication: {
-                auth: true,
-                user: response.data.result.data
-              }
+  const refreshAuthToken = async () => {
+    try {
+      const response = await DataService.get(BACKDOOR.RFSH);
+      const { status } = response.data || {};
+      const { data } = response.data.result || {};
+
+      if (status) {
+        dispatch({
+          type: SET_AUTHENTICATION,
+          payload: {
+            authentication: {
+              auth: true,
+              user: data
             }
-          });
-        }
-        else{
-          dispatch({
-            type: SET_AUTHENTICATION,
-            payload: {
-              authentication: {
-                auth: false,
-                user: authenticationstate.user
-              }
-            }
-          });
-        }
-      }).catch((err) => {
+          }
+        });
+      } else {
         dispatch({
           type: SET_AUTHENTICATION,
           payload: {
@@ -109,10 +90,8 @@ function App() {
             }
           }
         });
-      })
-      // setisAuthLoading(false);
-    }
-    else{
+      }
+    } catch (err) {
       dispatch({
         type: SET_AUTHENTICATION,
         payload: {
@@ -122,24 +101,38 @@ function App() {
           }
         }
       });
-      // setisAuthLoading(false);
     }
-  },[])
+  };
+
+  useEffect(() => {
+    refreshAuthToken();
+  }, []);
+
+  const renderRootRoue = () => {
+    if (!isSettingsDone) return <Navigate to="/setup" />;
+
+    if (authentication.auth === null) {
+      return <Splash />;
+    }
+
+    return authentication.auth ? <Home /> : <Navigate to="/login" />;
+  };
 
   return (
     <div className="flex flex-col h-screen w-full">
-      <div id='div_alerts_container' ref={scrollDivAlerts}>
-        {alerts.map((al: any, i: number) => {
-          return(
-            <Alert key={i} al={al} />
-          )
+      <div id="div_alerts_container" ref={scrollDivAlerts}>
+        {alerts.map((alert) => {
+          return <Alert key={alert} al={alert} />;
         })}
       </div>
       <Routes>
-        <Route path='/app/*' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Home /> : <Navigate to="/login" /> : <Splash /> : <Navigate to="/setup" />} />
-        <Route path='/setup/*' element={isSettingsDone ? <Navigate to="/app" /> : <Setup />} />
-        <Route path='/login' element={isSettingsDone ? authentication.auth !== null ? authentication.auth ? <Navigate to="/app" /> : <Login /> : <Navigate to="/app" /> : <Navigate to="/app" />} />
-        <Route path='/external/*' element={<ExternalContainer />} />
+        <Route path="/app/*" element={renderRootRoue()}>
+          <Route index element={<WelcomeBanner />} />
+        </Route>
+
+        <Route path="/setup/*" element={isSettingsDone ? <Navigate to="/app" /> : <Setup />} />
+        <Route path="/login" element={isSettingsDone || authentication.auth ? <Login /> : <Navigate to="/app" />} />
+        <Route path="/external/*" element={<ExternalContainer />} />
       </Routes>
     </div>
   );
