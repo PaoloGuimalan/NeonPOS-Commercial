@@ -25,7 +25,7 @@ import ReusableModal from '../../../reusables/ReusableModal';
 import { routing } from '../../../helpers/variables/constants';
 import { RootState } from '../../../redux/store/store';
 
-function Home() {
+function Main() {
   const authentication: AuthenticationInterface = useSelector((state: RootState) => state.authentication);
   const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
   const alerts: AlertsItem[] = useSelector((state: RootState) => state.alerts);
@@ -109,6 +109,28 @@ function Home() {
     navigate(`/app/${path}`);
   };
 
+  // Start of Refactored code
+
+  // object of Settings Array mapped
+  const settingsItem = [
+    { label: 'Open Neon Remote', onClick: OpenNeonRemote, className: 'bg-green-500' },
+    { label: 'Restart Reciept Window', onClick: RestartReceiptWindow, className: 'bg-green-700' },
+    { label: 'Restart Report Window', onClick: RestartReportWindow, className: 'bg-orange-500' }
+  ];
+
+  // Button Animate css globalized
+  const menuAnimation = (routingTab: string) => {
+    return {
+      backgroundColor: currenttab === routingTab ? 'white' : 'transparent',
+      color: currenttab === routingTab ? '#616161' : 'white'
+    };
+  };
+
+  const whileHover = {
+    backgroundColor: 'white',
+    color: '#616161'
+  };
+
   return (
     <div
       style={{
@@ -145,41 +167,25 @@ function Home() {
                 </div>
               </div>
               <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
-                <button
-                  onClick={OpenNeonRemote}
-                  className="h-[30px] w-full bg-green-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Neon Remote</span>
-                </button>
-                <button
-                  onClick={RestartReceiptWindow}
-                  className="h-[30px] w-full bg-green-700 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Restart Receipt Window</span>
-                </button>
-                <button
-                  onClick={RestartReportWindow}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Restart Report Window</span>
-                </button>
+                {settingsItem.map((setting) => (
+                  <button
+                    onClick={setting.onClick}
+                    className={`h-[30px] w-full ${setting.className} cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
+                  >
+                    <span className="text-[14px]">{setting.label}</span>
+                  </button>
+                ))}
               </div>
             </motion.div>
           }
         />
       )}
-      <div className="flex bg-accent-tertiary flex flex-1 flex-col max-w-[80px] items-center pt-[15px]">
+      <div className="flex bg-accent-tertiary  flex-1 flex-col max-w-[80px] items-center pt-[15px]">
         <div className="bg-transparent w-full flex flex-1 flex-col items-center p-[7px] pr-[0px] gap-[7px]">
           {authentication.user.permissions.includes('navigate_dashboard') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.DASHBOARD_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.DASHBOARD_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.DASHBOARD_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.DASHBOARD_ROUTE);
               }}
@@ -191,14 +197,8 @@ function Home() {
           )}
           {authentication.user.permissions.includes('navigate_menu') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.MENU_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.MENU_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.MENU_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.MENU_ROUTE);
               }}
@@ -210,14 +210,8 @@ function Home() {
           )}
           {authentication.user.permissions.includes('navigate_orders') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.ORDERS_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.ORDERS_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.ORDERS_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.ORDERS_ROUTE);
               }}
@@ -229,14 +223,8 @@ function Home() {
           )}
           {authentication.user.permissions.includes('navigate_inventory') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.INVENTORY_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.INVENTORY_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.INVENTORY_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.INVENTORY_ROUTE);
               }}
@@ -249,14 +237,8 @@ function Home() {
           {(authentication.user.permissions.includes('navigate_permissions') ||
             authentication.user.accountType === 'Admin') && ( // authentication.user.permissions.includes("navigate_permissions")
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.PERMISSIONS_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.PERMISSIONS_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.PERMISSIONS_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.PERMISSIONS_ROUTE);
               }}
@@ -268,14 +250,8 @@ function Home() {
           )}
           {authentication.user.permissions.includes('navigate_users') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.USERS_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.USERS_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.USERS_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.USERS_ROUTE);
               }}
@@ -287,14 +263,8 @@ function Home() {
           )}
           {authentication.user.permissions.includes('navigate_account') && (
             <motion.button
-              animate={{
-                backgroundColor: currenttab === routing.ACCOUNT_ROUTE ? 'white' : 'transparent',
-                color: currenttab === routing.ACCOUNT_ROUTE ? '#616161' : 'white'
-              }}
-              whileHover={{
-                backgroundColor: 'white',
-                color: '#616161'
-              }}
+              animate={menuAnimation(routing.ACCOUNT_ROUTE)}
+              whileHover={whileHover}
               onClick={() => {
                 navigateToTab(routing.ACCOUNT_ROUTE);
               }}
@@ -343,4 +313,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Main;

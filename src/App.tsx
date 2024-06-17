@@ -8,7 +8,7 @@ import { authenticationstate } from './app/redux/types/states';
 import Setup from './app/screens/setup/Setup';
 import Alert from './app/reusables/widgets/Alert';
 import Login from './app/screens/internal/Auth/Login';
-import Home from './app/screens/internal/Home/Home';
+import Main from './app/screens/internal/Main/Main';
 import ExternalContainer from './app/screens/external/ExternalContainer';
 import { RootState } from './app/redux/store/store';
 import { DataService } from './app/helpers/http/dataService';
@@ -115,7 +115,7 @@ function App() {
       return <Splash />;
     }
 
-    return authentication.auth ? <Home /> : <Navigate to="/login" />;
+    return authentication.auth ? <Main /> : <Navigate to="/login" />;
   };
 
   return (
