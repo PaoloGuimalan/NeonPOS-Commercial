@@ -3,19 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { FcAssistant, FcUnlock } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
-import { MdArrowBackIos, MdClose, MdSettings } from 'react-icons/md';
-import { motion } from 'framer-motion';
+import { MdArrowBackIos, MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import NeonPOS from '../../../../assets/NeonPOS.png';
 import NeonPOSSVG from '../../../../assets/NeonPOS_BG.svg';
 import { LoginRequest } from '../../../helpers/http/requests';
-import { SET_AUTHENTICATION, SET_SETTINGS } from '../../../redux/types/types';
+import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import ReusableModal from '../../../reusables/ReusableModal';
-import { settingsstate } from '../../../redux/types/states';
 import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
 import Buttonloader from '../../../reusables/loaders/Buttonloader';
 import { RootState } from '../../../redux/store/store';
+import Options from '../../../reusables/components/login/Options';
 
 function Login() {
   const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
@@ -29,8 +27,6 @@ function Login() {
 
   const [isFromSession, setisFromSession] = useState<boolean>(false);
   const [accountNamePreview, setaccountNamePreview] = useState<string>('');
-
-  const [toggleSettingsModal, settoggleSettingsModal] = useState<boolean>(false);
   const [isLoggingIn, setisLoggingIn] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -176,34 +172,6 @@ function Login() {
     CheckSessions();
   }, [settings]);
 
-  const ResetSetup = () => {
-    localStorage.removeItem('settings');
-    dispatch({
-      type: SET_SETTINGS,
-      payload: {
-        settings: settingsstate
-      }
-    });
-    settoggleSettingsModal(false);
-    window.ipcRenderer.send('close-external', '');
-  };
-
-  const OpenNeonRemote = () => {
-    // window.ipc.send('execute-command', 'gnome-terminal');
-    // settoggleSettingsModal(false);
-    window.ipcRenderer.send('execute-command', 'xdg-open https://neonremote.netlify.app');
-    settoggleSettingsModal(false);
-  };
-
-  const OpenTerminal = () => {
-    window.ipcRenderer.send('execute-command', 'gnome-terminal');
-    settoggleSettingsModal(false);
-  };
-
-  const ShutdownSystem = () => {
-    window.ipcRenderer.send('execute-command', 'systemctl poweroff');
-  };
-
   const setAccount = (mp: SavedAccountSessionsInterface) => {
     setisFromSession(true);
     setaccountID(mp.accountID);
@@ -214,12 +182,9 @@ function Login() {
   return (
     <div
       style={{
-        background: `url(${NeonPOSSVG})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'bottom',
-        backgroundRepeat: 'no-repeat'
+        backgroundImage: `url(${NeonPOSSVG})`
       }}
-      className="w-full h-full bg-primary absolute flex flex-1 flex-row font-Inter"
+      className="w-full h-full bg-cover bg-bottom bg-no-repeat bg-neonsvg bg-primary absolute flex flex-1 flex-row font-Inter"
     >
       <div className="h-full bg-transparent flex flex-1 items-center justify-center">
         {savedAccountSessions.length > 0 && (
@@ -264,73 +229,11 @@ function Login() {
         )}
       </div>{' '}
       {/** bg-secondary */}
-      {toggleSettingsModal && (
-        <ReusableModal
-          shaded
-          padded={false}
-          children={
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="bg-white w-[95%] h-[95%] max-w-[450px] max-h-[200px] rounded-[7px] p-[20px] pb-[5px] flex flex-col"
-            >
-              <div className="w-full flex flex-row">
-                <div className="flex flex-1">
-                  <span className="text-[16px] font-semibold">Reset Settings</span>
-                </div>
-                <div className="w-fit">
-                  <button
-                    onClick={() => {
-                      settoggleSettingsModal(false);
-                    }}
-                  >
-                    <MdClose />
-                  </button>
-                </div>
-              </div>
-              <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
-                <button
-                  onClick={OpenNeonRemote}
-                  className="h-[30px] w-full bg-green-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Neon Remote</span>
-                </button>
-                <button
-                  onClick={OpenTerminal}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Terminal</span>
-                </button>
-                <button
-                  onClick={ResetSetup}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Reset</span>
-                </button>
-                <button
-                  onClick={ShutdownSystem}
-                  className="h-[30px] w-full bg-red-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Shutdown</span>
-                </button>
-              </div>
-            </motion.div>
-          }
-        />
-      )}
+      <Options />
       <div className="h-full bg-transparent flex flex-1 justify-center items-center max-w-[600px] p-[20px]">
-        <button
-          onClick={() => {
-            settoggleSettingsModal(!toggleSettingsModal);
-          }}
-          className="absolute bottom-[10px] left-[10px] p-[10px] rounded-[7px]"
-        >
-          <MdSettings className="text-accent-tertiary" style={{ fontSize: '25px' }} />
-        </button>
-        <div className="bg-primary shadow-lg border-[1px] w-full max-w-[500px] h-full max-h-[700px] flex flex-col gap-[15px] justify-center items-center rounded-[10px] shadow-md p-[10px]">
+        <div className="bg-primary border-[1px] w-full max-w-[500px] h-full max-h-[700px] flex flex-col gap-[15px] justify-center items-center rounded-[10px] shadow-md p-[10px]">
           <div className="w-full max-w-[370px] flex flex-col gap-[50px] items-center justify-start pb-[10px]">
-            <img src={NeonPOS} className="h-[100px]" />
+            <img src={NeonPOS} className="h-[100px]" alt="NEON" />
             <span className="text-[20px] font-semibold text-accent-secondary">Login</span>
           </div>
           {isFromSession && (
