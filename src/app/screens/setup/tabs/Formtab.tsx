@@ -201,11 +201,12 @@ function Formtab() {
                       </Button>
 
                       <Button
-                        disabled={isVerifying}
+                        disabled={isShuttingdown}
                         onClick={CancelSetup}
+                        loading={isShuttingdown}
                         className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-red-500 cursor-pointer shadow-sm text-[12px] text-white font-semibold rounded-[4px]"
                       >
-                        {isShuttingdown ? '...Shutting down' : 'Cancel Setup'}
+                        {isShuttingdown ? 'Shutting down' : 'Cancel Setup'}
                       </Button>
                     </div>
                   </div>

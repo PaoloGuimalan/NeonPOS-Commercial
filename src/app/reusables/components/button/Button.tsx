@@ -1,11 +1,8 @@
 /* eslint-disable react/button-has-type */
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-
 import { cn } from '../../../lib/utils';
 import AnimatedLoader from '../../AnimatedLoader';
-// import { AnimatedLoader } from '../customs/AnimatedLoader/AnimatedLoader';
-// import { Flex } from '../customs/Wrappers';
 
 export const buttonVariants = cva(
   ' whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-slate-300',
@@ -57,11 +54,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         children={
           loading || icon ? (
-            // <Flex variant="centered" className={cn('flex gap-2', childClass)}>
-            //   {loading && <AnimatedLoader className="!me-0" color={loaderColor} />}
-            //   {icon}
-            //   {children && <span className={innerChildClass}>{children}</span>}
-            // </Flex>
             <div className={cn('flex items-center gap-2 justify-center', childClass)}>
               {loading && <AnimatedLoader />}
               {icon}
