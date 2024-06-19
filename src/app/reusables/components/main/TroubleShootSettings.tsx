@@ -6,6 +6,7 @@ import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { SettingsInterface } from '../../../helpers/variables/interfaces';
 import { RootState } from '@/app/redux/store/store';
 import { useSelector, useDispatch } from 'react-redux';
+import Button from '../button/Button';
 
 function TroubleShootSettings() {
   const [toggleTroubleshoot, settoggleTroubleshoot] = useState<boolean>(false);
@@ -85,13 +86,21 @@ function TroubleShootSettings() {
               </div>
               <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
                 {settingsItem.map((setting) => (
-                  <button
+                  // <button
+                  //   key={setting.label}
+                  //   onClick={setting.onClick}
+                  //   className={`h-[30px] w-full ${setting.className} cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
+                  // >
+                  //   <span className="text-[14px]">{setting.label}</span>
+                  // </button>
+
+                  <Button
                     key={setting.label}
                     onClick={setting.onClick}
-                    className={`h-[30px] w-full ${setting.className} cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
+                    className={`h-[30px] w-full ${setting.className}  cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
                   >
-                    <span className="text-[14px]">{setting.label}</span>
-                  </button>
+                    {setting.label}
+                  </Button>
                 ))}
               </div>
             </motion.div>

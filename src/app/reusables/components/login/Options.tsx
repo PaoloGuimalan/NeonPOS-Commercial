@@ -105,13 +105,13 @@ function Options({ isSetup, setHideBackground }: Props) {
               </div>
               <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
                 {options?.map((option) => (
-                  <button
+                  <Button
                     key={option.label}
                     onClick={option.onClick}
-                    className={`h-[30px] w-full ${option.color} cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
+                    className={`h-[30px] w-full ${option.color} text-sm cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
                   >
-                    <span className="text-[14px]">{option.label}</span>
-                  </button>
+                    {option.label}
+                  </Button>
                 ))}
               </div>
             </motion.div>

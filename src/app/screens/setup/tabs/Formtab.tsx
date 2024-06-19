@@ -10,6 +10,7 @@ import Options from '../../../reusables/components/login/Options';
 import BGLayout from '../../../reusables/BGLayout';
 import Button from '../../../reusables/components/button/Button';
 import Paragraph from '../../../reusables/components/typography/Paragraph';
+import Header from '../../../reusables/components/typography/Header';
 
 function Formtab() {
   const [NSUSRID, setNSUSRID] = useState<string>('');
@@ -107,11 +108,13 @@ function Formtab() {
                   <img src={NeonPOS.src} className="h-[60px]" alt="NEON POS ALT SRC" />
                 </div>
                 <div className="w-full flex flex-col justify-center items-center">
-                  <span className="text-[30px] font-semibold font-Inter">Welcome to Neon POS</span>
-                  <span className="text-[11px] font-Inter">Powered by Neon Service</span>
+                  <Header type="h3" className="font-semibold ">
+                    Welcome to Neon POS
+                  </Header>
+                  <Paragraph fontSize="xs">Powered by Neon Service</Paragraph>
                 </div>
                 <div className="w-full flex flex-col pt-[20px] pl-[20px] pr-[20px]">
-                  <Paragraph fontSize="sm" className="font-Inter text-justify">
+                  <Paragraph fontSize="sm" className=" text-justify">
                     Introducing Neon POS, the innovative Point-of-Sales system powered by cutting-edge software, Neon
                     Service. Seamlessly integrating state-of-the-art solutions, Neon POS offers streamlined transactions
                     and instant insights, transforming businesses.

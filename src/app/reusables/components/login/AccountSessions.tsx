@@ -1,13 +1,15 @@
-import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
-import { RootState } from '@/app/redux/store/store';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { z } from 'zod';
 import React, { SetStateAction, useEffect, useState, Dispatch } from 'react';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { MdClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store/store';
+import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
+import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { LoginSchema } from '../../../lib/schema/AuthSchema';
 import { Session } from '../../../lib/typings/Auth';
-import { z } from 'zod';
 
 type LoginData = z.infer<typeof LoginSchema>;
 
