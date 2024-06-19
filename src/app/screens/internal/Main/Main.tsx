@@ -2,24 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AiOutlineLogout } from 'react-icons/ai';
-import {
-  MdAccountBox,
-  MdAccountCircle,
-  MdClose,
-  MdDashboard,
-  MdInventory,
-  MdLock,
-  MdOutlineRestaurantMenu
-} from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoReceiptSharp } from 'react-icons/io5';
 import { AlertsItem, AuthenticationInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { authenticationstate } from '../../../redux/types/states';
 import { dispatchclearalerts } from '../../../helpers/utils/alertdispatching';
 import { CloseSSENotifications, SSENotificationsTRequest } from '../../../helpers/http/sse';
 import { GetFilesListResponseNeonRemote } from '../../../helpers/http/requests';
-import { routing } from '../../../helpers/variables/constants';
 import { RootState } from '../../../redux/store/store';
 import TroubleShootSettings from '../../../reusables/components/main/TroubleShootSettings';
 import BGLayout from '../../../reusables/BGLayout';
