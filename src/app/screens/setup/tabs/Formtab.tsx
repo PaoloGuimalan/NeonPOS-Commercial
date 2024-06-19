@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import ReusableModal from '../../../reusables/ReusableModal';
 import { motion } from 'framer-motion';
 import NeonPOS from '../../../../assets/NeonPOS.png';
-import NeonPOSSVG from '../../../../assets/NeonPOS_BG.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { InitialSetupDeviceVerificationRequest } from '../../../helpers/http/requests';
-import { MdClose, MdSettings } from 'react-icons/md';
-import { AlertsItem } from '../../../helpers/variables/interfaces';
 import { SET_SETTINGS } from '../../../redux/types/types';
+import Options from '../../../reusables/components/login/Options';
+import BGLayout from '../../../reusables/BGLayout';
 
 function Formtab() {
   const [NSUSRID, setNSUSRID] = useState<string>('');
@@ -20,7 +19,7 @@ function Formtab() {
   const [isVerifying, setisVerifying] = useState<boolean>(false);
 
   const [isShuttingdown, setisShuttingdown] = useState<boolean>(false);
-  const [toggleSettingsModal, settoggleSettingsModal] = useState<boolean>(false);
+  const [hideBackground, setHideBackground] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -80,84 +79,10 @@ function Formtab() {
     }, 5000);
   };
 
-  const OpenNeonRemote = () => {
-    // window.ipc.send('execute-command', 'gnome-terminal');
-    // settoggleSettingsModal(false);
-    window.ipcRenderer.send('execute-command', 'xdg-open https://neonremote.netlify.app');
-    settoggleSettingsModal(false);
-  };
-
-  const OpenTerminal = () => {
-    window.ipcRenderer.send('execute-command', 'gnome-terminal');
-    settoggleSettingsModal(false);
-  };
-
-  //   const CancelSetup = () => {
-  //     dispatchnewalert(dispatch, "warning", "Cannot cancel setup");
-  //   }
-
   return (
-    <div
-      style={{
-        background: `url(${NeonPOSSVG.src})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'bottom',
-        backgroundRepeat: 'no-repeat'
-      }}
-      className="w-full h-full absolute flex items-center"
-    >
-      <button
-        onClick={() => {
-          settoggleSettingsModal(!toggleSettingsModal);
-        }}
-        className="absolute bottom-[10px] left-[10px] p-[10px] rounded-[7px] z-[10]"
-      >
-        <MdSettings className="text-accent-tertiary" style={{ fontSize: '25px' }} />
-      </button>
-      {toggleSettingsModal && (
-        <ReusableModal
-          shaded
-          padded={false}
-          children={
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="bg-white w-[95%] h-[95%] max-w-[450px] max-h-[150px] rounded-[7px] p-[20px] pb-[5px] flex flex-col"
-            >
-              <div className="w-full flex flex-row">
-                <div className="flex flex-1">
-                  <span className="text-[16px] font-semibold">Reset Settings</span>
-                </div>
-                <div className="w-fit">
-                  <button
-                    onClick={() => {
-                      settoggleSettingsModal(false);
-                    }}
-                  >
-                    <MdClose />
-                  </button>
-                </div>
-              </div>
-              <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
-                <button
-                  onClick={OpenNeonRemote}
-                  className="h-[30px] w-full bg-green-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Neon Remote</span>
-                </button>
-                <button
-                  onClick={OpenTerminal}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Terminal</span>
-                </button>
-              </div>
-            </motion.div>
-          }
-        />
-      )}
-      {!toggleSettingsModal && (
+    <BGLayout className="w-full h-full absolute flex items-center">
+      <Options isSetup setHideBackground={setHideBackground} />
+      {!hideBackground && (
         <ReusableModal
           shaded={false}
           padded={false}
@@ -173,7 +98,7 @@ function Formtab() {
                 delay: 1,
                 duration: 1
               }}
-              className="border-[1px] bg-white w-[95%] h-[95%] max-w-[700px] shadow-md rounded-[10px] overflow-y-auto "
+              className="border-[1px] bg-white w-[95%] h-[95%] max-w-[700px] shadow-md rounded-[10px] overflow-y-auto"
             >
               <div className="w-full h-full p-[25px] flex flex-col gap-[10px]">
                 <div className="w-full flex flex-row">
@@ -285,7 +210,7 @@ function Formtab() {
           }
         />
       )}
-    </div>
+    </BGLayout>
   );
 }
 

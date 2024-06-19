@@ -122,7 +122,7 @@ function App() {
     <div className="flex flex-col h-screen w-full">
       <div id="div_alerts_container" ref={scrollDivAlerts}>
         {alerts.map((alert) => {
-          return <Alert key={alert} al={alert} />;
+          return <Alert key={alert.id} al={alert} />;
         })}
       </div>
       <Routes>

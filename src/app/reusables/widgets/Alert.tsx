@@ -51,9 +51,9 @@ function Alert({ al }: any) {
         marginLeft: timerUnToggle ? '0px' : '-800px',
         display: displayUntoggle ? 'flex' : 'none'
       }}
-      className={`div_alerts_prompt ${al.type} z-[3]`}
+      className={`div_alerts_prompt ${al.type} relative z-[50]`}
     >
-      <div id="div_header_alert">
+      <div id="div_header_alert" className="z-50 relative">
         {alertIcons[al.type].component}
         <span id="span_header_label">{alertIcons[al.type].title}</span>
         <div id="div_close_alert_container">
