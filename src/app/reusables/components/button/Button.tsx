@@ -63,9 +63,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             //   {children && <span className={innerChildClass}>{children}</span>}
             // </Flex>
             <div className={cn('flex items-center gap-2 justify-center', childClass)}>
+              {loading && <AnimatedLoader />}
               {icon}
               {children && <span className={innerChildClass}>{children}</span>}
-              {loading && <AnimatedLoader />}
             </div>
           ) : (
             <span className={innerChildClass}>{children}</span>

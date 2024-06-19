@@ -191,29 +191,15 @@ function Formtab() {
                       </select>
                     </div>
                     <div className="flex flex-flex w-full gap-[5px] pt-[10px] pb-[10px]">
-                      {/* <button
-                        disabled={isVerifying}
-                        onClick={VerifyCredentials}
-                        className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                      >
-                        <span className="text-[12px]">
-                          {isVerifying ? '...Verifying Credentials' : 'Verify and Confirm'}
-                        </span>
-                      </button> */}
                       <Button
                         disabled={isVerifying}
                         onClick={VerifyCredentials}
+                        loading={isVerifying}
                         className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] text-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
                       >
-                        {isVerifying ? '...Verifying Credentials' : 'Verify and Confirm'}
+                        {isVerifying ? 'Verifying Credentials' : 'Verify and Confirm'}
                       </Button>
-                      {/* <button
-                        disabled={isVerifying}
-                        onClick={CancelSetup}
-                        className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-red-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                      >
-                        <span className="text-[12px]">{isShuttingdown ? '...Shutting down' : 'Cancel Setup'}</span>
-                      </button> */}
+
                       <Button
                         disabled={isVerifying}
                         onClick={CancelSetup}
