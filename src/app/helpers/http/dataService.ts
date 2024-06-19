@@ -102,7 +102,7 @@ class DataService {
 client.interceptors.request.use((config) => {
   const token = getToken('authentication');
 
-  if (token.length) {
+  if (token) {
     config.headers['x-access-token'] = `${token}`;
   }
 
