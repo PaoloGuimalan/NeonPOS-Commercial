@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Startup from '../../reusables/Startup';
 import Formtab from './tabs/Formtab';
-import BGLayout from '@/app/reusables/BGLayout';
+import BGLayout from '../../reusables/BGLayout';
 
 function Setup() {
   const [isLoaded, setisLoaded] = useState<boolean>(false);
