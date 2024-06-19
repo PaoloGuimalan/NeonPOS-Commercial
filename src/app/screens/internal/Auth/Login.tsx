@@ -3,22 +3,23 @@ import { FcAssistant, FcUnlock } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { MdArrowBackIos } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
 import NeonPOS from '../../../../assets/NeonPOS.png';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
-import Buttonloader from '../../../reusables/loaders/Buttonloader';
+// import Buttonloader from '../../../reusables/loaders/Buttonloader';
 import { RootState } from '../../../redux/store/store';
 import Options from '../../../reusables/components/login/Options';
 import AccountSessions from '../../../reusables/components/login/AccountSessions';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { LoginSchema } from '../../../lib/schema/AuthSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from '../../../lib/typings/Auth';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import BGLayout from '../../../reusables/BGLayout';
+import Button from '../../../reusables/components/button/Button';
 
 type LoginData = z.infer<typeof LoginSchema>;
 
@@ -186,31 +187,26 @@ function Login() {
                 session.isFromSession && 'pt-[10px]'
               } flex flex-col items-center gap-[5px]`}
             >
-              <button
+              <Button
+                className="bg-accent-secondary text-white w-full max-w-[200px] h-[40px] font-semibold hover:bg-accent-hover"
                 type="submit"
                 disabled={!isValid || isSubmitting}
-                className="bg-accent-secondary hover:bg-accent-hover cursor-pointer w-full max-w-[200px] shadow-sm h-[40px] text-white font-semibold rounded-[7px]"
+                loading={isSubmitting}
               >
-                {isSubmitting ? <Buttonloader size="14px" /> : <span>Login</span>}
-              </button>
+                Login
+              </Button>
               {session.isFromSession && (
-                <button
+                <Button
                   type="button"
                   disabled={isSubmitting}
                   onClick={() => setSession({ isFromSession: false, namePreview: '' })}
-                  className="pl-[10px] pr-[10px] bg-accent-tertiary flex flex-row items-center justify-start cursor-pointer w-full max-w-[150px] shadow-sm h-[35px] text-white rounded-[7px]"
+                  loading={isSubmitting}
+                  innerChildClass="flex items-center justify-center"
+                  className="pl-[10px]  pr-[10px] bg-accent-tertiary flex items-center justify-center cursor-pointer w-full max-w-[200px] shadow-sm h-[35px] text-white rounded-[7px]"
                 >
-                  {isSubmitting ? (
-                    <Buttonloader size="14px" />
-                  ) : (
-                    <>
-                      <div className="text-[14px] relative w-[20px] -mr-[10px]">
-                        <MdArrowBackIos />
-                      </div>
-                      <span className="text-[14px] flex w-[calc(100%-20px)] justify-center">Back</span>
-                    </>
-                  )}
-                </button>
+                  <MdArrowBackIos />
+                  Back
+                </Button>
               )}
             </div>
           </form>
