@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import ReusableModal from '../../ReusableModal';
 import { settingsstate } from '../../../redux/types/states';
 import { SET_SETTINGS } from '../../../redux/types/types';
+import Button from '../button/Button';
 
 type Props = {
   isSetup?: boolean;
@@ -14,6 +15,14 @@ type Props = {
 function Options({ isSetup, setHideBackground }: Props) {
   const dispatch = useDispatch();
   const [toggleSettingsModal, setToggleSettingsModal] = useState<boolean>(false);
+
+  const modalHandler = () => {
+    if (setHideBackground) {
+      setHideBackground((prev) => !prev);
+    }
+
+    setToggleSettingsModal((prev) => !prev);
+  };
 
   const openNeonRemote = () => {
     window.ipcRenderer.send('execute-command', 'xdg-open https://neonremote.netlify.app');
@@ -64,22 +73,15 @@ function Options({ isSetup, setHideBackground }: Props) {
     }
   ];
 
-  const modalHandler = () => {
-    if (setHideBackground) {
-      setHideBackground((prev) => !prev);
-    }
-
-    setToggleSettingsModal((prev) => !prev);
-  };
-
   return (
     <>
-      <button
+      <Button
+        className="absolute z-10 bottom-[10px] left-[10px] rounded-[7px] cursor-pointer "
+        variant="ghost"
         onClick={modalHandler}
-        className="absolute z-10 bottom-[10px] left-[10px] p-[10px] rounded-[7px] cursor-pointer "
       >
         <MdSettings className="text-accent-tertiary" style={{ fontSize: '25px' }} />
-      </button>
+      </Button>
       {toggleSettingsModal && (
         <ReusableModal
           shaded

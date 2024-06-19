@@ -1,5 +1,5 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+// import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { AiFillCheckCircle, AiFillInfoCircle, AiFillWarning } from 'react-icons/ai';
 import { IoMdClose, IoMdCloseCircle } from 'react-icons/io';
@@ -9,7 +9,7 @@ function Alert({ al }: any) {
   const [displayUntoggle, setdisplayUntoggle] = useState(true);
 
   useEffect(() => {
-    if (al.type != 'incomingcall') {
+    if (al.type !== 'incomingcall') {
       setTimeout(() => {
         settimerUnToggle(false);
       }, 3000);
