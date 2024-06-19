@@ -36,6 +36,29 @@ function Options() {
     window.ipcRenderer.send('execute-command', 'systemctl poweroff');
   };
 
+  const options = [
+    {
+      label: 'Open Neon Remote',
+      onClick: openNeonRemote,
+      color: 'bg-green-500'
+    },
+    {
+      label: 'Open Terminal',
+      onClick: openTerminal,
+      color: 'bg-orange-500'
+    },
+    {
+      label: 'Reset',
+      onClick: resetSetup,
+      color: 'bg-green-500'
+    },
+    {
+      label: 'Shutdown',
+      onClick: shutdownSystem,
+      color: 'bg-red-500'
+    }
+  ];
+
   return (
     <>
       <button
@@ -72,30 +95,14 @@ function Options() {
                 </div>
               </div>
               <div className="w-full flex flex-1 flex-col items-center justify-center gap-[3px]">
-                <button
-                  onClick={openNeonRemote}
-                  className="h-[30px] w-full bg-green-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Neon Remote</span>
-                </button>
-                <button
-                  onClick={openTerminal}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Open Terminal</span>
-                </button>
-                <button
-                  onClick={resetSetup}
-                  className="h-[30px] w-full bg-orange-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Reset</span>
-                </button>
-                <button
-                  onClick={shutdownSystem}
-                  className="h-[30px] w-full bg-red-500 cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                >
-                  <span className="text-[14px]">Shutdown</span>
-                </button>
+                {options?.map((option) => (
+                  <button
+                    onClick={option.onClick}
+                    className={`h-[30px] w-full ${option.color} cursor-pointer shadow-sm text-white font-semibold rounded-[4px]`}
+                  >
+                    <span className="text-[14px]">{option.label}</span>
+                  </button>
+                ))}
               </div>
             </motion.div>
           }
