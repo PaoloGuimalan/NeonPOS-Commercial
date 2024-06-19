@@ -1,12 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState } from 'react';
 import { FcAssistant, FcUnlock } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
-import { MdArrowBackIos, MdClose } from 'react-icons/md';
+import { MdArrowBackIos } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import NeonPOS from '../../../../assets/NeonPOS.png';
-import NeonPOSSVG from '../../../../assets/NeonPOS_BG.svg';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
@@ -21,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from '../../../lib/typings/Auth';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
+import BGLayout from '../../../reusables/BGLayout';
 
 type LoginData = z.infer<typeof LoginSchema>;
 
@@ -128,12 +126,7 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${NeonPOSSVG})`
-      }}
-      className="w-full h-full bg-cover bg-bottom bg-no-repeat bg-neonsvg bg-primary absolute flex flex-1 flex-row font-Inter"
-    >
+    <BGLayout className="bg-primary absolute flex flex-1 flex-row font-Inter">
       <AccountSessions setValue={setValue} trigger={trigger} setSession={setSession} />
       <Options />
       <div className="h-full bg-transparent flex flex-1 justify-center items-center max-w-[600px] p-[20px]">
@@ -223,7 +216,7 @@ function Login() {
           </form>
         </div>
       </div>
-    </div>
+    </BGLayout>
   );
 }
 
