@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Splash from './app/reusables/Splash';
-import { AlertsItem, AuthenticationInterface, SettingsInterface } from './app/helpers/variables/interfaces';
+import { AuthenticationInterface, SettingsInterface } from './app/helpers/variables/interfaces';
 import { SET_AUTHENTICATION, SET_SETTINGS } from './app/redux/types/types';
 import { authenticationstate } from './app/redux/types/states';
 import Setup from './app/screens/setup/Setup';
@@ -14,10 +14,11 @@ import { RootState } from './app/redux/store/store';
 import { DataService } from './app/helpers/http/dataService';
 import BACKDOOR from './app/lib/endpoints/Backdoor';
 import WelcomeBanner from './app/reusables/holders/WelcomeBanner';
+import { AlertItem } from './app/lib/typings/Notifications';
 
 function App() {
   const authentication: AuthenticationInterface = useSelector((state: RootState) => state.authentication);
-  const alerts: AlertsItem[] = useSelector((state: RootState) => state.alerts);
+  const alerts: AlertItem[] = useSelector((state: RootState) => state.alerts);
   const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
@@ -122,7 +123,7 @@ function App() {
     <div className="flex flex-col h-screen w-full">
       <div id="div_alerts_container" ref={scrollDivAlerts}>
         {alerts.map((alert) => {
-          return <Alert key={alert.id} al={alert} />;
+          return <Alert key={alert.id} alert={alert} />;
         })}
       </div>
       <Routes>
