@@ -5,14 +5,14 @@ import { cn } from '../../../lib/utils';
 import AnimatedLoader from '../../AnimatedLoader';
 
 export const buttonVariants = cva(
-  ' whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-slate-300',
+  ' whitespace-nowrap font-Inter cursor-pointer  rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-950 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-slate-300',
   {
     variants: {
       variant: {
         default:
-          'bg-primary-500 text-slate-50 shadow hover:bg-primary-500/80 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90',
+          'bg-primary-500  text-slate-50 shadow hover:bg-primary-500/80 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90 ',
         destructive:
-          'bg-red-500 text-slate-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
+          'bg-red-100 text-white shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90',
         outline:
           'border border-slate-200 bg-transparent shadow-sm hover:bg-gray-200 hover:text-slate-900 dark:border-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-50',
         secondary:

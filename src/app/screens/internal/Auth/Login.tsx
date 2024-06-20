@@ -188,7 +188,7 @@ function Login() {
               } flex flex-col items-center gap-[5px]`}
             >
               <Button
-                className="bg-accent-secondary text-white w-full max-w-[200px] h-[40px] font-semibold hover:bg-accent-hover"
+                className="bg-accent-secondary text-white w-full  h-[40px]  hover:bg-accent-hover"
                 type="submit"
                 disabled={!isValid || isSubmitting}
                 loading={isSubmitting}
@@ -200,9 +200,8 @@ function Login() {
                   type="button"
                   disabled={isSubmitting}
                   onClick={() => setSession({ isFromSession: false, namePreview: '' })}
-                  loading={isSubmitting}
                   innerChildClass="flex items-center justify-center"
-                  className="pl-[10px]  pr-[10px] bg-accent-tertiary flex items-center justify-center cursor-pointer w-full max-w-[200px] shadow-sm h-[35px] text-white rounded-[7px]"
+                  className="bg-accent-tertiary w-full h-[40px] text-white"
                 >
                   <MdArrowBackIos />
                   Back

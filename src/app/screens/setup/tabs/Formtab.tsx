@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
 import ReusableModal from '../../../reusables/ReusableModal';
 import NeonPOS from '../../../../assets/NeonPOS.png';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
@@ -11,11 +14,9 @@ import Button from '../../../reusables/components/button/Button';
 import Paragraph from '../../../reusables/components/typography/Paragraph';
 import Header from '../../../reusables/components/typography/Header';
 import { SetupSchema } from '../../../lib/schema/AuthSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
 import { DataService } from '../../../helpers/http/dataService';
 import SERVICE from '../../../lib/endpoints/Service';
+import Input from '../../../reusables/components/input/Input';
 
 type SetupData = z.infer<typeof SetupSchema>;
 
@@ -103,7 +104,7 @@ function Formtab() {
                     <form onSubmit={handleSubmit(verifyCredentials)}>
                       <div className="flex flex-col w-full gap-[5px]">
                         <span className="text-[12px] font-Inter font-semibold">Neon Service User ID</span>
-                        <input
+                        <Input
                           {...register('userID')}
                           placeholder="eg: USR_00000_0000000000"
                           className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
@@ -111,7 +112,7 @@ function Formtab() {
                       </div>
                       <div className="flex flex-col w-full gap-[5px]">
                         <span className="text-[12px] font-Inter font-semibold">Neon Service Device ID</span>
-                        <input
+                        <Input
                           {...register('deviceID')}
                           placeholder="eg: USR_00000_0000000000"
                           className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
@@ -119,7 +120,7 @@ function Formtab() {
                       </div>
                       <div className="flex flex-col w-full gap-[5px]">
                         <span className="text-[12px] font-Inter font-semibold">Connection Token</span>
-                        <input
+                        <Input
                           {...register('connectionToken')}
                           placeholder="Input connection token of this device provided in Neon Remote"
                           className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
@@ -158,17 +159,17 @@ function Formtab() {
                           type="submit"
                           disabled={isSubmitting || !isValid}
                           loading={isSubmitting}
-                          className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] text-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
+                          className="h-[32px]   text-[12px] bg-accent-tertiary   text-white"
                         >
                           {isSubmitting ? 'Verifying Credentials' : 'Verify and Confirm'}
                         </Button>
 
                         <Button
                           type="submit"
-                          disabled={isSubmitting}
+                          disabled={isShuttingdown}
                           onClick={cancelSetup}
                           loading={isShuttingdown}
-                          className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-red-500 cursor-pointer shadow-sm text-[12px] text-white font-semibold rounded-[4px]"
+                          className="h-[32px]   bg-red-500  text-[12px]  text-white"
                         >
                           {isShuttingdown ? 'Shutting down' : 'Cancel Setup'}
                         </Button>
