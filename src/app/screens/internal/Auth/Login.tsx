@@ -20,6 +20,7 @@ import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import BGLayout from '../../../reusables/BGLayout';
 import Button from '../../../reusables/components/button/Button';
+import Input from '../../../reusables/components/input/Input';
 
 type LoginData = z.infer<typeof LoginSchema>;
 
@@ -150,10 +151,10 @@ function Login() {
                   <div className="w-[45px] flex items-center justify-center">
                     <FcAssistant style={{ fontSize: '22px' }} />
                   </div>
-                  <input
+                  <Input
                     {...register('accountID')}
                     placeholder="Employee ID"
-                    className="bg-transparent outline-none text-[14px] w-full h-full flex flex-1"
+                    className="bg-transparent outline-none text-[14px] w-full h-full flex flex-1 border-none focus-visible:ring-0"
                   />
                 </div>
               )}
@@ -161,11 +162,11 @@ function Login() {
                 <div className="w-[45px] flex items-center justify-center">
                   <FcUnlock style={{ fontSize: '22px' }} />
                 </div>
-                <input
+                <Input
                   {...register('password')}
                   placeholder="Password"
                   type="password"
-                  className="bg-transparent outline-none text-[14px] w-full h-full flex flex-1"
+                  className="bg-transparent outline-none text-[14px] w-full h-full flex flex-1 border-none focus-visible:ring-0"
                 />
               </div>
               {!session.isFromSession && (

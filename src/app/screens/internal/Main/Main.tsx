@@ -89,6 +89,7 @@ function Main() {
         <div className="bg-transparent w-full flex flex-1 flex-col items-center p-[7px] pr-[0px] gap-[7px]">
           {NAVIGATIONS.map((item) => (
             <motion.button
+              key={item.label}
               animate={menuAnimation(item.navigation)}
               whileHover={whileHover}
               onClick={() => {
