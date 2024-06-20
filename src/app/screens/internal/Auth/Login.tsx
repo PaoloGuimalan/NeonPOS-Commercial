@@ -10,7 +10,6 @@ import NeonPOS from '../../../../assets/NeonPOS.png';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
-// import Buttonloader from '../../../reusables/loaders/Buttonloader';
 import { RootState } from '../../../redux/store/store';
 import Options from '../../../reusables/components/login/Options';
 import AccountSessions from '../../../reusables/components/login/AccountSessions';
