@@ -34,7 +34,7 @@ class DataService {
     });
   }
 
-  static post(path = '', data = {}, optionalHeader = {}, type: URLTYPE = 'BACKDOOR') {
+  static post(path = '', data = {}, type: URLTYPE = 'BACKDOOR', optionalHeader = {}) {
     return client({
       method: 'POST',
       url: path,

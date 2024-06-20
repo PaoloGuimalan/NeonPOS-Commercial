@@ -4,78 +4,55 @@ import { motion } from 'framer-motion';
 import ReusableModal from '../../../reusables/ReusableModal';
 import NeonPOS from '../../../../assets/NeonPOS.png';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import { InitialSetupDeviceVerificationRequest } from '../../../helpers/http/requests';
 import { SET_SETTINGS } from '../../../redux/types/types';
 import Options from '../../../reusables/components/login/Options';
 import BGLayout from '../../../reusables/BGLayout';
 import Button from '../../../reusables/components/button/Button';
 import Paragraph from '../../../reusables/components/typography/Paragraph';
 import Header from '../../../reusables/components/typography/Header';
+import { SetupSchema } from '../../../lib/schema/AuthSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { DataService } from '../../../helpers/http/dataService';
+import SERVICE from '../../../lib/endpoints/Service';
+
+type SetupData = z.infer<typeof SetupSchema>;
 
 function Formtab() {
-  const [NSUSRID, setNSUSRID] = useState<string>('');
-  const [NSDVCID, setNSDVCID] = useState<string>('');
-  const [connectionToken, setconnectionToken] = useState<string>('');
-  const [SetupType, setSetupType] = useState<string>('POS');
-  const [POSType, setPOSType] = useState<string>('none');
-
-  const [isVerifying, setisVerifying] = useState<boolean>(false);
-
   const [isShuttingdown, setisShuttingdown] = useState<boolean>(false);
   const [hideBackground, setHideBackground] = useState<boolean>(false);
-
   const dispatch = useDispatch();
 
-  const VerifyCredentials = () => {
-    if (NSUSRID.trim() !== '' && NSDVCID.trim() !== '' && connectionToken.trim() !== '' && POSType.trim() !== 'none') {
-      setisVerifying(true);
-      InitialSetupDeviceVerificationRequest({
-        userID: NSUSRID,
-        deviceID: NSDVCID,
-        connectionToken
-      })
-        .then((response) => {
-          if (response.data.status) {
-            dispatchnewalert(dispatch, 'success', response.data.message);
-            localStorage.setItem(
-              'settings',
-              JSON.stringify({
-                userID: NSUSRID,
-                deviceID: NSDVCID,
-                connectionToken,
-                setup: SetupType,
-                posType: POSType
-              })
-            );
-            dispatch({
-              type: SET_SETTINGS,
-              payload: {
-                settings: {
-                  userID: NSUSRID,
-                  deviceID: NSDVCID,
-                  connectionToken,
-                  setup: SetupType,
-                  posType: POSType
-                }
-              }
-            });
-            window.ipcRenderer.send('setup-type-reload', SetupType);
-          } else {
-            setisVerifying(false);
-            dispatchnewalert(dispatch, 'warning', response.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setisVerifying(false);
-          dispatchnewalert(dispatch, 'error', 'Error requesting verification');
-        });
-    } else {
-      dispatchnewalert(dispatch, 'warning', 'Fields are incomplete');
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, isValid }
+  } = useForm<SetupData>({
+    resolver: zodResolver(SetupSchema)
+  });
+
+  const verifyCredentials = async (data: SetupData) => {
+    try {
+      const response = await DataService.post(SERVICE.SETUP_DEVICE, data, 'NEONSERVICE');
+      const { message } = response.data || {};
+
+      dispatchnewalert(dispatch, 'success', message);
+      localStorage.setItem('settings', JSON.stringify(data));
+      dispatch({
+        type: SET_SETTINGS,
+        payload: {
+          settings: data
+        }
+      });
+      window.ipcRenderer.send('setup-type-reload', data.setup);
+    } catch (err) {
+      console.log(err);
+      dispatchnewalert(dispatch, 'error', 'Device not match');
     }
   };
 
-  const CancelSetup = () => {
+  const cancelSetup = () => {
     setisShuttingdown(true);
     setTimeout(() => {
       window.ipcRenderer.send('execute-command', 'systemctl poweroff');
@@ -105,7 +82,7 @@ function Formtab() {
             >
               <div className="w-full h-full p-[25px] flex flex-col gap-[10px]">
                 <div className="w-full flex flex-row">
-                  <img src={NeonPOS.src} className="h-[60px]" alt="NEON POS ALT SRC" />
+                  <img src={NeonPOS} className="h-[60px]" alt="NEON POS ALT SRC" />
                 </div>
                 <div className="w-full flex flex-col justify-center items-center">
                   <Header type="h3" className="font-semibold ">
@@ -123,92 +100,80 @@ function Formtab() {
                 <div className="w-full flex flex-col pt-[10px] pl-[20px] pr-[20px] gap-[20px]">
                   <span className="text-[14px] font-Inter font-semibold">Enter setup details</span>
                   <div className="flex flex-col w-full pl-[20px] pr-[20px] gap-[10px]">
-                    <div className="flex flex-col w-full gap-[5px]">
-                      <span className="text-[12px] font-Inter font-semibold">Neon Service User ID</span>
-                      <input
-                        placeholder="eg: USR_00000_0000000000"
-                        value={NSUSRID}
-                        onChange={(e) => {
-                          setNSUSRID(e.target.value);
-                        }}
-                        className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
-                      />
-                    </div>
-                    <div className="flex flex-col w-full gap-[5px]">
-                      <span className="text-[12px] font-Inter font-semibold">Neon Service Device ID</span>
-                      <input
-                        placeholder="eg: USR_00000_0000000000"
-                        value={NSDVCID}
-                        onChange={(e) => {
-                          setNSDVCID(e.target.value);
-                        }}
-                        className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
-                      />
-                    </div>
-                    <div className="flex flex-col w-full gap-[5px]">
-                      <span className="text-[12px] font-Inter font-semibold">Connection Token</span>
-                      <input
-                        placeholder="Input connection token of this device provided in Neon Remote"
-                        value={connectionToken}
-                        onChange={(e) => {
-                          setconnectionToken(e.target.value);
-                        }}
-                        className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
-                      />
-                    </div>
-                    <div className="flex flex-col w-full gap-[5px]">
-                      <span className="text-[12px] font-Inter font-semibold">Setup Type</span>
-                      <select
-                        value={SetupType}
-                        onChange={(e) => {
-                          setSetupType(e.target.value);
-                        }}
-                        className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
-                      >
-                        <option defaultChecked value="POS">
-                          POS
-                        </option>
-                        <option value="Portable">Portable</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col w-full gap-[5px]">
-                      <span className="text-[12px] font-Inter font-semibold">POS Type</span>
-                      <select
-                        value={POSType}
-                        onChange={(e) => {
-                          setPOSType(e.target.value);
-                        }}
-                        className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
-                      >
-                        <option defaultChecked value="none">
-                          -- Select a POS Type --
-                        </option>
-                        <option value="fast_food">Fast Food</option>
-                        <option value="restaurant">Restaurant</option>
-                        <option value="convenience_store">Convenience Store</option>
-                        <option value="market">Market</option>
-                        <option value="retail">Retail</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-flex w-full gap-[5px] pt-[10px] pb-[10px]">
-                      <Button
-                        disabled={isVerifying}
-                        onClick={VerifyCredentials}
-                        loading={isVerifying}
-                        className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] text-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
-                      >
-                        {isVerifying ? 'Verifying Credentials' : 'Verify and Confirm'}
-                      </Button>
+                    <form onSubmit={handleSubmit(verifyCredentials)}>
+                      <div className="flex flex-col w-full gap-[5px]">
+                        <span className="text-[12px] font-Inter font-semibold">Neon Service User ID</span>
+                        <input
+                          {...register('userID')}
+                          placeholder="eg: USR_00000_0000000000"
+                          className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
+                        />
+                      </div>
+                      <div className="flex flex-col w-full gap-[5px]">
+                        <span className="text-[12px] font-Inter font-semibold">Neon Service Device ID</span>
+                        <input
+                          {...register('deviceID')}
+                          placeholder="eg: USR_00000_0000000000"
+                          className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
+                        />
+                      </div>
+                      <div className="flex flex-col w-full gap-[5px]">
+                        <span className="text-[12px] font-Inter font-semibold">Connection Token</span>
+                        <input
+                          {...register('connectionToken')}
+                          placeholder="Input connection token of this device provided in Neon Remote"
+                          className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
+                        />
+                      </div>
+                      <div className="flex flex-col w-full gap-[5px]">
+                        <span className="text-[12px] font-Inter font-semibold">Setup Type</span>
+                        <select
+                          {...register('posType')}
+                          className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
+                        >
+                          <option defaultChecked value="POS">
+                            POS
+                          </option>
+                          <option value="Portable">Portable</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col w-full gap-[5px]">
+                        <span className="text-[12px] font-Inter font-semibold">POS Type</span>
+                        <select
+                          {...register('setup')}
+                          className="font-Inter bg-transparent border-[1px] h-[35px] pl-[10px] pr-[10px] outline-none text-[12px] w-full rounded-[4px]"
+                        >
+                          <option defaultChecked value="">
+                            -- Select a POS Type --
+                          </option>
+                          <option value="fast_food">Fast Food</option>
+                          <option value="restaurant">Restaurant</option>
+                          <option value="convenience_store">Convenience Store</option>
+                          <option value="market">Market</option>
+                          <option value="retail">Retail</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-flex w-full gap-[5px] pt-[10px] pb-[10px]">
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting || !isValid}
+                          loading={isSubmitting}
+                          className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] text-[12px] bg-accent-tertiary cursor-pointer shadow-sm text-white font-semibold rounded-[4px]"
+                        >
+                          {isSubmitting ? 'Verifying Credentials' : 'Verify and Confirm'}
+                        </Button>
 
-                      <Button
-                        disabled={isShuttingdown}
-                        onClick={CancelSetup}
-                        loading={isShuttingdown}
-                        className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-red-500 cursor-pointer shadow-sm text-[12px] text-white font-semibold rounded-[4px]"
-                      >
-                        {isShuttingdown ? 'Shutting down' : 'Cancel Setup'}
-                      </Button>
-                    </div>
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting}
+                          onClick={cancelSetup}
+                          loading={isShuttingdown}
+                          className="flex items-center justify-center h-[32px] font-Inter pl-[12px] pr-[12px] bg-red-500 cursor-pointer shadow-sm text-[12px] text-white font-semibold rounded-[4px]"
+                        >
+                          {isShuttingdown ? 'Shutting down' : 'Cancel Setup'}
+                        </Button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
