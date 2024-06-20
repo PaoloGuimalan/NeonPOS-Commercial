@@ -3,7 +3,8 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { AlertsItem, AuthenticationInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
+import { Authentication, Settings } from '../../../lib/typings/Auth';
+import { AlertItem } from '../../../lib/typings/Notifications';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { authenticationstate } from '../../../redux/types/states';
 import { dispatchclearalerts } from '../../../helpers/utils/alertdispatching';
@@ -15,9 +16,9 @@ import BGLayout from '../../../reusables/BGLayout';
 import { NAVIGATIONS } from '../../../lib/statics/navigation';
 
 function Main() {
-  const authentication: AuthenticationInterface = useSelector((state: RootState) => state.authentication);
-  const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
-  const alerts: AlertsItem[] = useSelector((state: RootState) => state.alerts);
+  const authentication: Authentication = useSelector((state: RootState) => state.authentication);
+  const settings: Settings = useSelector((state: RootState) => state.settings);
+  const alerts: AlertItem[] = useSelector((state: RootState) => state.alerts);
   const dispatch = useDispatch();
   const [currenttab, setcurrenttab] = useState<string>('');
   const scrollDivAlerts = useRef<HTMLDivElement>(null);

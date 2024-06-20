@@ -1,3 +1,4 @@
+/* eslint-disable import/no-useless-path-segments */
 import React, { SetStateAction, useState, Dispatch } from 'react';
 import { motion } from 'framer-motion';
 import { MdClose, MdSettings } from 'react-icons/md';
@@ -5,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import ReusableModal from '../../ReusableModal';
 import { settingsstate } from '../../../redux/types/states';
 import { SET_SETTINGS } from '../../../redux/types/types';
-import Button from '../button/Button';
+import { Button } from '../../../reusables/components';
 
 type Props = {
   isSetup?: boolean;

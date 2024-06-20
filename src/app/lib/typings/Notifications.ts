@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 type Item = {
   title: 'Success' | 'Info' | 'Warning' | 'Error' | 'Incoming Call';
   component: React.ReactNode | null;

@@ -9,22 +9,21 @@ import { useForm } from 'react-hook-form';
 import NeonPOS from '../../../../assets/NeonPOS.png';
 import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import { SavedAccountSessionsInterface, SettingsInterface } from '../../../helpers/variables/interfaces';
+
 import { RootState } from '../../../redux/store/store';
 import Options from '../../../reusables/components/login/Options';
 import AccountSessions from '../../../reusables/components/login/AccountSessions';
 import { LoginSchema } from '../../../lib/schema/AuthSchema';
-import { Session } from '../../../lib/typings/Auth';
+import { Session, SavedAccountSessions, Settings } from '../../../lib/typings/Auth';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import BGLayout from '../../../reusables/BGLayout';
-import Button from '../../../reusables/components/button/Button';
-import Input from '../../../reusables/components/input/Input';
+import { Button, Input } from '../../../reusables/components';
 
 type LoginData = z.infer<typeof LoginSchema>;
 
 function Login() {
-  const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
+  const settings: Settings = useSelector((state: RootState) => state.settings);
   const navigate = useNavigate();
   const [saveSession, setsaveSession] = useState<boolean>(false);
 
@@ -53,9 +52,9 @@ function Login() {
       if (saveSession) {
         const currentaccountsession = localStorage.getItem('account_sessions');
         if (currentaccountsession) {
-          const parsedcurraccountsessions: SavedAccountSessionsInterface[] = JSON.parse(currentaccountsession);
+          const parsedcurraccountsessions: SavedAccountSessions[] = JSON.parse(currentaccountsession);
           if (parsedcurraccountsessions.length > 0) {
-            const accIDChecker = parsedcurraccountsessions.map((mp: SavedAccountSessionsInterface) => mp.accountID);
+            const accIDChecker = parsedcurraccountsessions.map((mp: SavedAccountSessions) => mp.accountID);
             if (!accIDChecker.includes(data.accountID)) {
               const JsonConvertedsessions = JSON.stringify([
                 ...parsedcurraccountsessions,
