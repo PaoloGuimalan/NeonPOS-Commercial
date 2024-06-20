@@ -1,6 +1,6 @@
 import { AuthenticationInterface, SettingsInterface } from '../../typings/interfaces';
 import { AlertItem } from '../../lib/typings/Notifications';
-import { ActionProp } from '../../typings/props';
+import { ActionProp } from '../../helpers/variables/props';
 import { authenticationstate, settingsstate } from '../types/states';
 import {
   SET_ALERTS,
