@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { MdClose, MdSettings } from 'react-icons/md';
 import ReusableModal from '../../ReusableModal';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import { SettingsInterface } from '../../../helpers/variables/interfaces';
-import { RootState } from '../../../redux/store/store';
+import { Settings } from '../../../lib/typings/Auth';
+import { RootState } from '../../../../app/redux/store/store';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '../button/Button';
+import { Button } from '../../../reusables/components';
 
 function TroubleShootSettings() {
   const [toggleTroubleshoot, settoggleTroubleshoot] = useState<boolean>(false);
-  const settings: SettingsInterface = useSelector((state: RootState) => state.settings);
+  const settings: Settings = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
   const OpenNeonRemote = () => {

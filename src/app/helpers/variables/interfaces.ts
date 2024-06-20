@@ -32,25 +32,6 @@ export interface CreateNewPermissionPayloadInterface {
   deviceID: string;
 }
 
-export interface AuthenticationInterface {
-  auth: boolean | null;
-  user: {
-    accountID: string;
-    accountType: string;
-    accountName: {
-      firstname: string;
-      middlename: string;
-      lastname: string;
-    };
-    permissions: string[];
-    dateCreated: string;
-    createdBy: {
-      accountID: string;
-      deviceID: string;
-    };
-  };
-}
-
 export interface PermissionInterface {
   permissionID: string;
   permissionType: string;
@@ -108,14 +89,6 @@ export interface InitialSetupDeviceVerificationRequestInterface {
 
 export interface GetFilesListResponseNeonRemoteInterface {
   token: string;
-}
-
-export interface SettingsInterface {
-  userID: string;
-  deviceID: string;
-  connectionToken: string;
-  setup: string;
-  posType?: string;
 }
 
 export interface InvoiceInterface {
@@ -211,15 +184,4 @@ export interface DailyReportInterface {
   saleswdiscount: number;
   taxtotal: number;
   taxedsales: number;
-}
-
-export interface SavedAccountSessionsInterface {
-  accountID: string;
-  accountName: {
-    firstname: string;
-    middlename: string;
-    lastname: string;
-  };
-  deviceID: string;
-  userID: string;
 }

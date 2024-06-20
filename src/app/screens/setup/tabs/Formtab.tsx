@@ -10,13 +10,12 @@ import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { SET_SETTINGS } from '../../../redux/types/types';
 import Options from '../../../reusables/components/login/Options';
 import BGLayout from '../../../reusables/BGLayout';
-import Button from '../../../reusables/components/button/Button';
 import Paragraph from '../../../reusables/components/typography/Paragraph';
 import Header from '../../../reusables/components/typography/Header';
 import { SetupSchema } from '../../../lib/schema/AuthSchema';
 import { DataService } from '../../../helpers/http/dataService';
 import SERVICE from '../../../lib/endpoints/Service';
-import Input from '../../../reusables/components/input/Input';
+import { Button, Input } from '../../../reusables/components';
 
 type SetupData = z.infer<typeof SetupSchema>;
 
