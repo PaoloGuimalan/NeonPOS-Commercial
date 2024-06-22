@@ -49,6 +49,13 @@ function Login() {
       const response = await DataService.post(BACKDOOR.LOGIN, { ...formData, userID: settings.userID });
       const { data, authtoken } = response.data.result || {};
 
+      const accountInfos = {
+        accountID: data.accountID,
+        accountName: data.accountName,
+        deviceID: settings.deviceID,
+        userID: settings.userID
+      };
+
       if (saveSession) {
         const currentaccountsession = localStorage.getItem('account_sessions');
         if (currentaccountsession) {
@@ -56,51 +63,21 @@ function Login() {
           if (parsedcurraccountsessions.length > 0) {
             const accIDChecker = parsedcurraccountsessions.map((mp: SavedAccountSessions) => mp.accountID);
             if (!accIDChecker.includes(data.accountID)) {
-              const JsonConvertedsessions = JSON.stringify([
-                ...parsedcurraccountsessions,
-                {
-                  accountID: data.accountID,
-                  accountName: data.accountName,
-                  deviceID: settings.deviceID,
-                  userID: settings.userID
-                }
-              ]);
+              const JsonConvertedsessions = JSON.stringify([...parsedcurraccountsessions, accountInfos]);
               localStorage.setItem('account_sessions', JsonConvertedsessions);
             } else {
               const parsedaccsessionsnoncurrent = parsedcurraccountsessions.filter(
                 (flt) => flt.accountID !== data.accountID
               );
-              const JsonConvertedsessions = JSON.stringify([
-                ...parsedaccsessionsnoncurrent,
-                {
-                  accountID: data.accountID,
-                  accountName: data.accountName,
-                  deviceID: settings.deviceID,
-                  userID: settings.userID
-                }
-              ]);
+              const JsonConvertedsessions = JSON.stringify([...parsedaccsessionsnoncurrent, accountInfos]);
               localStorage.setItem('account_sessions', JsonConvertedsessions);
             }
           } else {
-            const JsonConvertedsessions = JSON.stringify([
-              {
-                accountID: data.accountID,
-                accountName: data.accountName,
-                deviceID: settings.deviceID,
-                userID: settings.userID
-              }
-            ]);
+            const JsonConvertedsessions = JSON.stringify([accountInfos]);
             localStorage.setItem('account_sessions', JsonConvertedsessions);
           }
         } else {
-          const JsonConvertedsessions = JSON.stringify([
-            {
-              accountID: data.accountID,
-              accountName: data.accountName,
-              deviceID: settings.deviceID,
-              userID: settings.userID
-            }
-          ]);
+          const JsonConvertedsessions = JSON.stringify([accountInfos]);
           localStorage.setItem('account_sessions', JsonConvertedsessions);
         }
       }
@@ -118,7 +95,7 @@ function Login() {
       });
       localStorage.setItem('authentication', authtoken);
       dispatchnewalert(dispatch, 'success', 'Successfully logged in');
-      navigate('/app/');
+      navigate('/app/welcome');
     } catch (err) {
       console.log(err);
       dispatchnewalert(dispatch, 'error', 'Error logging in');

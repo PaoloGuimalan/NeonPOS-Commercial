@@ -5,7 +5,7 @@ const BACKDOOR = {
   GET_PERMISSIONS: (id: number) => `/api/settings/getpermissions/${id}`,
   CREATE_PERMISSIONS: '/api/settings/permissions',
   DELETE_PERMISSION: (token: string) => `/api/settings/deletepermission/${token}`,
-  GET_USER: (id: number) => `/api/auth/getusers/${id}`,
+  GET_USER: `/api/auth/getusers/`,
   GET_USER_REQUEST: (id: number, accID: number) => `/api/auth/getusers/${id}/${accID}`,
   REMOVE_USER: (token: string) => `/api/auth/removeuser/${token}`,
   ADD_PRODUCT: `/api/menu/addproduct`,

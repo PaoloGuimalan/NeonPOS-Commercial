@@ -39,3 +39,29 @@ export interface Authentication {
     };
   };
 }
+
+export interface RegisterAccount {
+  firstname: string;
+  middlename: string;
+  lastname: string;
+  accountType: string;
+  password: string;
+  creatorAccountID: string;
+  userID: string;
+  deviceID: string;
+}
+
+export interface UserAccount {
+  accountID: string;
+  accountType: string;
+  accountName: {
+    firstname: string;
+    middlename: string;
+    lastname: string;
+  };
+  dateCreated: string;
+  createdBy: {
+    accountID: string;
+    deviceID: string;
+  };
+}
