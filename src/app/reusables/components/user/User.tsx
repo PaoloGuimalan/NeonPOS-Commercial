@@ -1,15 +1,14 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import sign from 'jwt-encode';
 import { UserAccount } from '../../../lib/typings/Auth';
 import { Authentication, Settings } from '../../../lib/typings/Auth';
-import CONFIG from '../../../helpers/variables/config';
 
 import { RootState } from '../../../redux/store/store';
 import Button from '../button/Button';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
+import RemoveUser from './RemoveUser';
 
 type Props = {
   mp: UserAccount;
@@ -18,7 +17,6 @@ type Props = {
 
 function User({ mp, setUpdateUsers }: Props) {
   const authentication: Authentication = useSelector((state: RootState) => state.authentication);
-  const settings: Settings = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
   const [isRemovingUser, setisRemovingUser] = useState<boolean>(false);
@@ -26,14 +24,13 @@ function User({ mp, setUpdateUsers }: Props) {
   const RemoveUserProcess = async () => {
     try {
       setisRemovingUser(true);
-      const SECRET: string = `${CONFIG.JWTSECRET}`;
-      const encodedDeletingID = sign({ userID: settings.userID, accountID: mp.accountID }, SECRET);
-      const response = await DataService.delete(BACKDOOR.REMOVE_USER(encodedDeletingID));
+      const response = await DataService.delete(BACKDOOR.REMOVE_USER(mp.accountID));
 
-      console.log(response);
       setUpdateUsers((prev) => !prev);
+      dispatchnewalert(dispatch, 'success', response.data.message);
     } catch (err) {
       console.log(err);
+      dispatchnewalert(dispatch, 'error', 'Failed to delete user. Please try again!');
     } finally {
       setisRemovingUser(false);
     }
@@ -68,15 +65,10 @@ function User({ mp, setUpdateUsers }: Props) {
               <span>Disable</span>
             </button>
           )}
-          {authentication.user.accountID !== mp.accountID && authentication.user.permissions.includes('delete_user') && (
-            <Button
-              disabled={isRemovingUser}
-              onClick={RemoveUserProcess}
-              className="text-[14px] w-[70px] flex items-center justify-center bg-red-500 text-white p-[5px] pl-[8px] pr-[8px] rounded-[4px]"
-            >
-              Remove
-            </Button>
-          )}
+          {authentication.user.accountID !== mp.accountID &&
+            authentication.user.permissions.includes('delete_user') && (
+              <RemoveUser disabled={isRemovingUser} onConfirm={RemoveUserProcess} />
+            )}
         </div>
       </div>
     </div>

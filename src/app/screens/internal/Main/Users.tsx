@@ -13,6 +13,8 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { UserSchema } from '../../../lib/schema/UserSchema';
 import Empty from '../../../reusables/components/empty/Empty';
+import Password from '../../../reusables/components/formfields/Password';
+import ErrorMessageField from '../../../reusables/components/formfields/ErrorMessageField';
 
 type UserData = z.infer<typeof UserSchema>;
 
@@ -29,9 +31,10 @@ function Users() {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isValid }
+    formState: { isSubmitting, isValid, errors }
   } = useForm<UserData>({
-    resolver: zodResolver(UserSchema)
+    resolver: zodResolver(UserSchema),
+    mode: 'onChange'
   });
 
   const getUsers = async () => {
@@ -135,20 +138,22 @@ function Users() {
                 </div>
               </div>
               <div className="w-full flex flex-col gap-[5px]">
-                <span className="text-[15px] font-semibold">Password</span>
-                <input
-                  type="password"
-                  {...register('password')}
+                <Password
+                  label="Password"
+                  inputProps={{ ...register('password') }}
                   placeholder="Input desired password"
-                  className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                  className="w-full"
                 />
-                <span className="text-[15px] font-semibold">Confirm Password</span>
-                <input
-                  type="password"
-                  {...register('confirmPassword')}
+                <ErrorMessageField errorText={errors.password?.message} />
+                <Password
+                  label="Confirm Password"
+                  inputProps={{
+                    ...register('confirmPassword')
+                  }}
                   placeholder="Input desired password"
-                  className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                  className="w-full"
                 />
+                <ErrorMessageField errorText={errors.confirmPassword?.message} />
               </div>
               <div className="w-full h-fit flex flex-col gap-[5px] pt-[10px]">
                 <Button
