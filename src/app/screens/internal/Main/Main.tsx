@@ -11,7 +11,7 @@ import { dispatchclearalerts } from '../../../helpers/utils/alertdispatching';
 import { CloseSSENotifications, SSENotificationsTRequest } from '../../../helpers/http/sse';
 import { GetFilesListResponseNeonRemote } from '../../../helpers/http/requests';
 import { RootState } from '../../../redux/store/store';
-import TroubleShootSettings from '../../../reusables/components/main/TroubleShootSettings';
+import { TroubleShootSettings } from '../../../reusables/components';
 import BGLayout from '../../../reusables/BGLayout';
 import { NAVIGATIONS } from '../../../lib/statics/navigation';
 

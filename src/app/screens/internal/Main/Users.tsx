@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import AnimatedLoader from '../../../reusables/AnimatedLoader';
-import { User, Button } from '../../../reusables/components';
+import { User, Button, LabeledInput, Password, ErrorMessageField, Empty } from '../../../reusables/components';
 import { RootState } from '../../../redux/store/store';
 import { Authentication, Settings } from '../../../lib/typings/Auth';
 import { UserAccount } from '../../../lib/typings/Auth';
@@ -12,9 +12,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { UserSchema } from '../../../lib/schema/UserSchema';
-import Empty from '../../../reusables/components/empty/Empty';
-import Password from '../../../reusables/components/formfields/Password';
-import ErrorMessageField from '../../../reusables/components/formfields/ErrorMessageField';
 
 type UserData = z.infer<typeof UserSchema>;
 
@@ -99,35 +96,34 @@ function Users() {
           <span className="font-semibold text-[20px]">Add a User</span>
           <div className="shadow-lg border-[1px] w-full flex flex-col gap-[10px] bg-white p-[15px] pt-[20px] h-fit">
             <form onSubmit={handleSubmit(registerAccount)}>
-              <div className="w-full flex flex-col gap-[5px]">
-                <span className="text-[15px] font-semibold">First Name</span>
-                <input
-                  type="text"
+              <div className="w-full flex flex-col gap-[6px]">
+                <LabeledInput
+                  label="Fist Name"
                   {...register('firstname')}
                   placeholder="Input user first name"
-                  className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                  className="w-full  "
                 />
-                <span className="text-[15px] font-semibold">Middle Name</span>
-                <input
+                <LabeledInput
+                  label="Middle Name"
                   type="text"
                   {...register('middlename')}
                   placeholder="Input user middle name (optional)"
-                  className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                  className="w-full"
                 />
-                <span className="text-[15px] font-semibold">Last Name</span>
-                <input
+                <LabeledInput
+                  label="Last Name"
                   type="text"
                   {...register('lastname')}
                   placeholder="Input user last name"
-                  className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                  className="w-full  "
                 />
               </div>
-              <div className="w-full flex flex-col gap-[5px]">
+              <div className="w-full flex flex-col gap-[5px] mt-2">
                 <span className="text-[15px] font-semibold">Account Type</span>
                 <div className="w-full flex flex-row gap-[5px]">
                   <select
                     {...register('accountType')}
-                    className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px]"
+                    className="w-full border-[1px] h-[35px] text-[14px] pl-[10px] pr-[10px] rounded-md"
                   >
                     <option value="">--Select Type--</option>
                     <option value="Admin">Admin</option>

@@ -11,14 +11,12 @@ import { SET_AUTHENTICATION } from '../../../redux/types/types';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 
 import { RootState } from '../../../redux/store/store';
-import Options from '../../../reusables/components/login/Options';
-import AccountSessions from '../../../reusables/components/login/AccountSessions';
 import { LoginSchema } from '../../../lib/schema/AuthSchema';
 import { Session, SavedAccountSessions, Settings } from '../../../lib/typings/Auth';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import BGLayout from '../../../reusables/BGLayout';
-import { Button, Input } from '../../../reusables/components';
+import { Button, Input, AccountSessions, Options } from '../../../reusables/components';
 
 type LoginData = z.infer<typeof LoginSchema>;
 

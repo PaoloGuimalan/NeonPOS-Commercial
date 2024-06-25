@@ -4,6 +4,7 @@ import { Label } from './Label';
 
 interface Props extends React.ComponentPropsWithRef<'input'> {
   label: string;
+  className?: string;
 }
 
 const LabeledInput = React.forwardRef<HTMLInputElement, Props>(({ className, label, ...props }, ref) => {
