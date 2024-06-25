@@ -31,7 +31,6 @@ function Users() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { isSubmitting, isValid, errors }
   } = useForm<UserData>({
     resolver: zodResolver(UserSchema),
