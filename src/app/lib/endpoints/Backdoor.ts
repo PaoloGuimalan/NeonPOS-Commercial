@@ -7,7 +7,7 @@ const BACKDOOR = {
   DELETE_PERMISSION: (token: string) => `/api/settings/deletepermission/${token}`,
   GET_USER: `/api/auth/getusers/`,
   GET_USER_REQUEST: (id: number, accID: number) => `/api/auth/getusers/${id}/${accID}`,
-  REMOVE_USER: (token: string) => `/api/auth/removeuser/${token}`,
+  REMOVE_USER: (id: string) => `/api/auth/removeuser/${id}`,
   ADD_PRODUCT: `/api/menu/addproduct`,
   GET_PRODUCTS: (userID: number) => `/api/menu/getproducts/${userID}`,
   REMOVE_PRODUCT: '/api/menu/removeproduct',
