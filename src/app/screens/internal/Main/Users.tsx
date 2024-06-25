@@ -97,25 +97,18 @@ function Users() {
           <div className="shadow-lg border-[1px] w-full flex flex-col gap-[10px] bg-white p-[15px] pt-[20px] h-fit">
             <form onSubmit={handleSubmit(registerAccount)}>
               <div className="w-full flex flex-col gap-[6px]">
-                <LabeledInput
-                  label="Fist Name"
-                  {...register('firstname')}
-                  placeholder="Input user first name"
-                  className="w-full  "
-                />
+                <LabeledInput label="Fist Name" {...register('firstname')} placeholder="Input user first name" />
                 <LabeledInput
                   label="Middle Name"
                   type="text"
                   {...register('middlename')}
                   placeholder="Input user middle name (optional)"
-                  className="w-full"
                 />
                 <LabeledInput
                   label="Last Name"
                   type="text"
                   {...register('lastname')}
                   placeholder="Input user last name"
-                  className="w-full  "
                 />
               </div>
               <div className="w-full flex flex-col gap-[5px] mt-2">
@@ -138,7 +131,6 @@ function Users() {
                   label="Password"
                   inputProps={{ ...register('password') }}
                   placeholder="Input desired password"
-                  className="w-full"
                 />
                 <ErrorMessageField errorText={errors.password?.message} />
                 <Password
@@ -147,7 +139,6 @@ function Users() {
                     ...register('confirmPassword')
                   }}
                   placeholder="Input desired password"
-                  className="w-full"
                 />
                 <ErrorMessageField errorText={errors.confirmPassword?.message} />
               </div>
