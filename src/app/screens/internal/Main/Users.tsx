@@ -69,6 +69,8 @@ function Users() {
     getUsers();
   }, [settings, updateUsers]);
 
+  // console.log(window.location);
+
   return (
     <div className="w-full flex flex-row bg-shade font-Inter">
       <div className="flex flex-1 flex-col p-[20px] gap-[10px]">

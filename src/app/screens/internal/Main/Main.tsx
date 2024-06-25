@@ -24,6 +24,14 @@ function Main() {
   const scrollDivAlerts = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  const currentActiveTab = localStorage?.getItem('tabDirectory');
+
+  useEffect(() => {
+    if (currentActiveTab) {
+      navigateToTab(currentActiveTab);
+    }
+  }, []);
+
   const LogoutProcess = () => {
     CloseSSENotifications();
     dispatchclearalerts(dispatch);
@@ -67,6 +75,7 @@ function Main() {
 
   const navigateToTab = (path: string) => {
     setcurrenttab(path);
+    localStorage.setItem('tabDirectory', path);
     navigate(`/app/${path}`);
   };
 

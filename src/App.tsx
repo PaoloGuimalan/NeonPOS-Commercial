@@ -120,7 +120,7 @@ function App() {
     return authentication.auth ? <Main /> : <Navigate to="/login" />;
   };
 
-  console.log(window.location);
+  // console.log(window.location);
 
   return (
     <div className="flex flex-col h-screen w-full">
