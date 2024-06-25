@@ -2,12 +2,14 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import sign from 'jwt-encode';
-// import { JWT_SECRET } from '../../helpers/typings/keys';
 import { UserAccount } from '../../../lib/typings/Auth';
 import { Authentication, Settings } from '../../../lib/typings/Auth';
+import CONFIG from '../../../helpers/variables/config';
 
 import { RootState } from '../../../redux/store/store';
 import Button from '../button/Button';
+import { DataService } from '../../../helpers/http/dataService';
+import BACKDOOR from '../../../lib/endpoints/Backdoor';
 
 type Props = {
   mp: UserAccount;
@@ -21,8 +23,20 @@ function User({ mp, setUpdateUsers }: Props) {
 
   const [isRemovingUser, setisRemovingUser] = useState<boolean>(false);
 
-  const RemoveUserProcess = () => {
-    console.log('asd');
+  const RemoveUserProcess = async () => {
+    try {
+      setisRemovingUser(true);
+      const SECRET: string = `${CONFIG.JWTSECRET}`;
+      const encodedDeletingID = sign({ userID: settings.userID, accountID: mp.accountID }, SECRET);
+      const response = await DataService.delete(BACKDOOR.REMOVE_USER(encodedDeletingID));
+
+      console.log(response);
+      setUpdateUsers((prev) => !prev);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setisRemovingUser(false);
+    }
   };
 
   const DisableUserAccountProcess = () => {

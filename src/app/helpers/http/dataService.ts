@@ -4,8 +4,6 @@ import CONFIG from '../variables/config';
 import { CONFIGURATION, URLTYPE } from '../../lib/typings/DataService';
 import getToken from './getToken';
 
-export const API_ENDPOINT_STAGING = import.meta.env.VITE_API_URL;
-
 export const client = axios.create({
   headers: {
     'Content-Type': 'application/json'
