@@ -65,3 +65,16 @@ export interface UserAccount {
     deviceID: string;
   };
 }
+
+export interface DailyReport {
+  accountID: string;
+  deviceID: string;
+  dateMade: string;
+  numberofsales: number;
+  totalsales: number;
+  discount: number;
+  discounttotal: number;
+  saleswdiscount: number;
+  taxtotal: number;
+  taxedsales: number;
+}

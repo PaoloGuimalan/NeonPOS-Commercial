@@ -172,16 +172,3 @@ export interface CategoriesListInterface {
     deviceID: string;
   };
 }
-
-export interface DailyReportInterface {
-  accountID: string;
-  deviceID: string;
-  dateMade: string;
-  numberofsales: number;
-  totalsales: number;
-  discount: number;
-  discounttotal: number;
-  saleswdiscount: number;
-  taxtotal: number;
-  taxedsales: number;
-}

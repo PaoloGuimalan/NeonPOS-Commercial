@@ -15,7 +15,7 @@ const BACKDOOR = {
   GET_ORDERS: (token: string) => `/api/orders/getorders/${token}`,
   GET_CATEGORIES: '/api/orders/category',
   CREATE_CATEGORY: '/api/orders/category',
-  GENERATE_REPORT: (token: string) => `/api/accounting/generatereport/${token}`,
+  GENERATE_REPORT: (dateScope: string, timeScope: string) => `/api/accounting/generatereport/${dateScope}/${timeScope}`,
   CLOSE_ORDER: '/api/orders/closeorder',
   CLOSE_ORDER_2: '/api/orders/closeorderV2'
 };
