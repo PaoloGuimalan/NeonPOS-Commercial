@@ -14,8 +14,7 @@ import { DataService } from './app/helpers/http/dataService';
 import BACKDOOR from './app/lib/endpoints/Backdoor';
 import WelcomeBanner from './app/reusables/holders/WelcomeBanner';
 import { AlertItem } from './app/lib/typings/Notifications';
-import { Main, Users } from './app/screens/internal/Main';
-import Dashboard from './app/screens/internal/Main/Dashboard';
+import { Account, Main, Users, Dashboard, Inventory, Permissions } from './app/screens/internal/Main';
 
 function App() {
   const authentication: Authentication = useSelector((state: RootState) => state.authentication);
@@ -132,8 +131,11 @@ function App() {
       <Routes>
         <Route path="/app/*" element={renderRootRoue()}>
           <Route path="welcome" element={<WelcomeBanner />} />
-          <Route path="users" element={<Users />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="permissions" element={<Permissions />} />
+          <Route path="users" element={<Users />} />
+          <Route path="account" element={<Account />} />
         </Route>
 
         <Route path="/setup/*" element={isSettingsDone ? <Navigate to="/app" /> : <Setup />} />

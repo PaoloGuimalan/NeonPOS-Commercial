@@ -39,6 +39,18 @@ export interface Authentication {
     };
   };
 }
+export interface Permission {
+  permissionID: string;
+  permissionType: string;
+  allowedUsers: string[];
+  isEnabled: boolean;
+}
+
+export interface PermissionItemProp {
+  mp: Permission;
+  GetPermissionsProcess: () => void;
+  GetSpecificUserProcess: () => void;
+}
 
 export interface RegisterAccount {
   firstname: string;

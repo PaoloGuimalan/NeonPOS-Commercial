@@ -9,6 +9,7 @@ import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import CONFIG from '../../../helpers/variables/config';
 import { Button } from '../../../reusables/components';
+import SidebarLayout from '../../../reusables/components/layout/SidebarLayout';
 
 function Dashboard() {
   const authentication: Authentication = useSelector((state: any) => state.authentication);
@@ -100,7 +101,7 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-row bg-shade font-Inter">
+    <SidebarLayout>
       <div className="flex flex-1 flex-col p-[20px] gap-[10px]">
         <span className="font-semibold text-[20px]">Dashboard</span>
         <div className="bg-transparent flex flex-col flex-1 gap-[10px]">
@@ -187,7 +188,7 @@ function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </SidebarLayout>
   );
 }
 

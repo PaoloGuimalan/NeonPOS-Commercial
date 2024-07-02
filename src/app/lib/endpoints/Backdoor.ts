@@ -2,7 +2,7 @@ const BACKDOOR = {
   LOGIN: '/api/auth/login',
   REGISTER: '/api/auth/register',
   RFSH: '/api/auth/rfsh',
-  GET_PERMISSIONS: (id: number) => `/api/settings/getpermissions/${id}`,
+  GET_PERMISSIONS: '/api/settings/getpermissions/',
   CREATE_PERMISSIONS: '/api/settings/permissions',
   DELETE_PERMISSION: (token: string) => `/api/settings/deletepermission/${token}`,
   GET_USER: `/api/auth/getusers/`,
