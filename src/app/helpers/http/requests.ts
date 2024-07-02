@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable no-return-await */
 import Axios from 'axios';
 import {
   AddProductRequestInterface,

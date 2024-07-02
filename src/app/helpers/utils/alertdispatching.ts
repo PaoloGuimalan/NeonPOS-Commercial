@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { UseDispatch } from 'react-redux';
 import { SET_CLEAR_ALERTS, SET_MUTATE_ALERTS } from '../../redux/types/types';
 

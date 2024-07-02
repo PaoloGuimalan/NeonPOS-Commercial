@@ -23,3 +23,4 @@ export { default as SubHeader } from './typography/SubHeader';
 
 // * OTHERS
 export { default as User } from './user/User';
+export { default as UnderDevelopment } from './UnderDevelopment';

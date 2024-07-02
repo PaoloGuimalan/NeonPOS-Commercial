@@ -39,6 +39,18 @@ export interface Authentication {
     };
   };
 }
+export interface Permission {
+  permissionID: string;
+  permissionType: string;
+  allowedUsers: string[];
+  isEnabled: boolean;
+}
+
+export interface PermissionItemProp {
+  mp: Permission;
+  GetPermissionsProcess: () => void;
+  GetSpecificUserProcess: () => void;
+}
 
 export interface RegisterAccount {
   firstname: string;
@@ -64,4 +76,17 @@ export interface UserAccount {
     accountID: string;
     deviceID: string;
   };
+}
+
+export interface DailyReport {
+  accountID: string;
+  deviceID: string;
+  dateMade: string;
+  numberofsales: number;
+  totalsales: number;
+  discount: number;
+  discounttotal: number;
+  saleswdiscount: number;
+  taxtotal: number;
+  taxedsales: number;
 }

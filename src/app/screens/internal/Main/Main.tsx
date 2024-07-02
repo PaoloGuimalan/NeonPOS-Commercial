@@ -14,6 +14,7 @@ import { RootState } from '../../../redux/store/store';
 import { TroubleShootSettings } from '../../../reusables/components';
 import BGLayout from '../../../reusables/BGLayout';
 import { NAVIGATIONS } from '../../../lib/statics/navigation';
+import { session } from 'electron';
 
 function Main() {
   const authentication: Authentication = useSelector((state: RootState) => state.authentication);
@@ -24,7 +25,7 @@ function Main() {
   const scrollDivAlerts = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const currentActiveTab = localStorage?.getItem('tabDirectory');
+  const currentActiveTab = sessionStorage?.getItem('tabDirectory');
 
   useEffect(() => {
     if (currentActiveTab) {
@@ -36,6 +37,7 @@ function Main() {
     CloseSSENotifications();
     dispatchclearalerts(dispatch);
     localStorage.removeItem('authentication');
+    sessionStorage.removeItem('tabDirectory');
     dispatch({
       type: SET_AUTHENTICATION,
       payload: {
@@ -75,7 +77,7 @@ function Main() {
 
   const navigateToTab = (path: string) => {
     setcurrenttab(path);
-    localStorage.setItem('tabDirectory', path);
+    sessionStorage.setItem('tabDirectory', path);
     navigate(`/app/${path}`);
   };
 

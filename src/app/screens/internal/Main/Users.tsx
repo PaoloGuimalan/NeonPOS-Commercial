@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { UserSchema } from '../../../lib/schema/UserSchema';
+import SidebarLayout from '../../../reusables/components/layout/SidebarLayout';
 
 type UserData = z.infer<typeof UserSchema>;
 
@@ -72,7 +73,7 @@ function Users() {
   // console.log(window.location);
 
   return (
-    <div className="w-full flex flex-row bg-shade font-Inter">
+    <SidebarLayout>
       <div className="flex flex-1 flex-col p-[20px] gap-[10px]">
         <span className="font-semibold text-[20px]">Users</span>
         <div className="w-full flex flex-row gap-[5px] p-[15px] pt-[15px] h-full overflow-y-scroll">
@@ -161,7 +162,7 @@ function Users() {
           </div>
         </div>
       )}
-    </div>
+    </SidebarLayout>
   );
 }
 
