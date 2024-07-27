@@ -5,11 +5,7 @@ export type Session = {
 
 export interface SavedAccountSessions {
   accountID: string;
-  accountName: {
-    firstname: string;
-    middlename: string;
-    lastname: string;
-  };
+  accountName: AccountName;
   deviceID: string;
   userID: string;
 }
@@ -26,11 +22,7 @@ export interface Authentication {
   user: {
     accountID: string;
     accountType: string;
-    accountName: {
-      firstname: string;
-      middlename: string;
-      lastname: string;
-    };
+    accountName: AccountName;
     permissions: string[];
     dateCreated: string;
     createdBy: {
@@ -66,11 +58,7 @@ export interface RegisterAccount {
 export interface UserAccount {
   accountID: string;
   accountType: string;
-  accountName: {
-    firstname: string;
-    middlename: string;
-    lastname: string;
-  };
+  accountName: AccountName;
   dateCreated: string;
   createdBy: {
     accountID: string;
@@ -90,3 +78,9 @@ export interface DailyReport {
   taxtotal: number;
   taxedsales: number;
 }
+
+export type AccountName = {
+  firstname: string;
+  middlename: string;
+  lastname: string;
+};

@@ -4,7 +4,7 @@ import { cn } from '../../../lib/utils';
 
 interface ParagraphProps extends React.AllHTMLAttributes<HTMLParagraphElement>, VariantProps<typeof paragraphVariants> {
   className?: string;
-  fontSize: 'lg' | 'md' | 'sm' | 'xs' | 'xl';
+  fontSize: 'lg' | 'md' | 'sm' | 'xs' | 'xl' | 'base';
 }
 
 const paragraphVariants = cva('font-Inter', {
@@ -14,7 +14,8 @@ const paragraphVariants = cva('font-Inter', {
       lg: 'xs:text-xs sm:text-sm md:text-md lg:text-lg',
       md: 'text-sm lg:text-md',
       sm: 'text-sm',
-      xs: 'text-xs'
+      xs: 'text-xs',
+      base: 'text-base'
     }
   },
   defaultVariants: {

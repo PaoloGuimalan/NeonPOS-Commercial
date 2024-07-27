@@ -13,6 +13,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { UserSchema } from '../../../lib/schema/UserSchema';
 import SidebarLayout from '../../../reusables/components/layout/SidebarLayout';
+import Pageloader from '../../../reusables/loaders/Pageloader';
 
 type UserData = z.infer<typeof UserSchema>;
 
@@ -66,30 +67,30 @@ function Users() {
     }
   };
 
+  const renderUsers = () => {
+    if (isLoading) {
+      return <Pageloader />;
+    }
+
+    if (!users.length) {
+      return <Empty size="w-20" title="NO USERS" />;
+    }
+
+    return users.map((mp: UserAccount) => {
+      return <User key={mp.accountID} mp={mp} setUpdateUsers={setUpdateUsers} />;
+    });
+  };
+
   useEffect(() => {
     getUsers();
   }, [settings, updateUsers]);
-
-  // console.log(window.location);
 
   return (
     <SidebarLayout>
       <div className="flex flex-1 flex-col p-[20px] gap-[10px]">
         <span className="font-semibold text-[20px]">Users</span>
         <div className="w-full flex flex-row gap-[5px] p-[15px] pt-[15px] h-full overflow-y-scroll">
-          {isLoading ? (
-            <AnimatedLoader />
-          ) : (
-            <div className="w-full h-fit flex flex-row flex-wrap gap-[7px]">
-              {users.length ? (
-                users.map((mp: UserAccount) => {
-                  return <User key={mp.accountID} mp={mp} setUpdateUsers={setUpdateUsers} />;
-                })
-              ) : (
-                <Empty size="w-20" title="NO USERS" />
-              )}
-            </div>
-          )}
+          <div className="w-full h-fit flex flex-row flex-wrap gap-[7px]">{renderUsers()}</div>
         </div>
       </div>
       {authentication.user.permissions.includes('add_new_user') && (

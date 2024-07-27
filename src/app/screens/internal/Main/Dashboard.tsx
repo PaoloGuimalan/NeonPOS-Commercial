@@ -1,102 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import { Authentication, DailyReport, Settings } from '../../../lib/typings/Auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { GenerateDailyReport } from '../../../helpers/http/requests';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import sign from 'jwt-encode';
 import { dateGetter, timeGetter } from '../../../helpers/utils/generatefns';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
-import CONFIG from '../../../helpers/variables/config';
 import { Button } from '../../../reusables/components';
 import SidebarLayout from '../../../reusables/components/layout/SidebarLayout';
+import { staticDailyReport } from '../../../lib/statics/dashboard';
+import { RootState } from '../../../redux/store/store';
 
 function Dashboard() {
-  const authentication: Authentication = useSelector((state: any) => state.authentication);
-  const settings: Settings = useSelector((state: any) => state.settings);
+  const authentication: Authentication = useSelector((state: RootState) => state.authentication);
+  const settings: Settings = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
-  const [dailyReportDisplay, setdailyReportDisplay] = useState<DailyReport>({
-    accountID: '',
-    deviceID: '',
-    dateMade: '',
-    numberofsales: 0,
-    totalsales: 0,
-    discount: 0,
-    discounttotal: 0,
-    saleswdiscount: 0,
-    taxtotal: 0,
-    taxedsales: 0
-  });
+  const [dailyReportDisplay, setdailyReportDisplay] = useState<DailyReport>(staticDailyReport);
 
   const PrintDailyReportProcess = async () => {
     try {
       const response = await DataService.get(BACKDOOR.GENERATE_REPORT(dateGetter(), timeGetter()));
 
-      const { status, result, message } = response.data || {};
-      console.log(status, result);
+      const { result } = response.data || {};
+      const printTemplateData: DailyReport = {
+        accountID: authentication.user.accountID,
+        deviceID: settings.deviceID,
+        dateMade: result[0].dateMade || '',
+        numberofsales: result[0].numberofsales,
+        totalsales: result[0].totalsales.toFixed(2),
+        discount: result[0].discount.toFixed(0),
+        discounttotal: result[0].discounttotal.toFixed(2),
+        saleswdiscount: result[0].saleswdiscount.toFixed(2),
+        taxtotal: result[0].taxtotal.toFixed(2),
+        taxedsales: result[0].taxedsales.toFixed(2)
+      };
 
-      if (status && result > 0) {
-        const printTemplateData: DailyReport = {
-          accountID: authentication.user.accountID,
-          deviceID: settings.deviceID,
-          dateMade: result[0].dateMade || '',
-          numberofsales: result[0].numberofsales,
-          totalsales: result[0].totalsales.toFixed(2),
-          discount: result[0].discount.toFixed(0),
-          discounttotal: result[0].discounttotal.toFixed(2),
-          saleswdiscount: result[0].saleswdiscount.toFixed(2),
-          taxtotal: result[0].taxtotal.toFixed(2),
-          taxedsales: result[0].taxedsales.toFixed(2)
-        };
-
-        // @ts-ignore
-        window.ipc.send('ready-generate', JSON.stringify(printTemplateData));
-      } else {
-        dispatchnewalert(dispatch, 'error', 'Error making request to generate report');
-      }
+      // @ts-ignore
+      window?.ipc?.send('ready-generate', JSON.stringify(printTemplateData));
     } catch (error) {
+      console.error(error);
       dispatchnewalert(dispatch, 'error', 'Error making request to generate report');
-      console.log(error);
-    }
-  };
-
-  const getDailyReportProcess = async () => {
-    try {
-      const response = await DataService.get(BACKDOOR.GENERATE_REPORT(dateGetter(), timeGetter()));
-
-      const { status, result } = response.data || {};
-
-      if (status.length > 0) {
-        setdailyReportDisplay({
-          accountID: authentication.user.accountID,
-          deviceID: settings.deviceID,
-          dateMade: result[0].dateMade,
-          numberofsales: result[0].numberofsales,
-          totalsales: result[0].totalsales.toFixed(2),
-          discount: result[0].discount.toFixed(0),
-          discounttotal: result[0].discounttotal.toFixed(2),
-          saleswdiscount: result[0].saleswdiscount.toFixed(2),
-          taxtotal: result[0].taxtotal.toFixed(2),
-          taxedsales: result[0].taxedsales.toFixed(2)
-        });
-      } else {
-        setdailyReportDisplay({
-          // @ts-ignore
-          accountID: authentication.user.accountID,
-          // @ts-ignore
-          deviceID: settings.deviceID,
-          ...dailyReportDisplay
-        });
-        dispatchnewalert(dispatch, 'warning', 'No records to generate yet');
-      }
-    } catch (error) {
-      dispatchnewalert(dispatch, 'error', 'Error making request to generate report');
-      console.log(error);
     }
   };
 
   useEffect(() => {
+    const getDailyReportProcess = async () => {
+      try {
+        const response = await DataService.get(BACKDOOR.GENERATE_REPORT(dateGetter(), timeGetter()));
+
+        const { result } = response.data || {};
+        const { dateMade, discount, totalsales, discounttotal, saleswdiscount, taxtotal, taxedsales } =
+          result?.[0] || {};
+
+        if (result.length > 0) {
+          setdailyReportDisplay({
+            accountID: authentication.user.accountID,
+            deviceID: settings.deviceID,
+            dateMade: dateMade,
+            numberofsales: 5,
+            totalsales: totalsales.toFixed(2),
+            discount: discount.toFixed(0),
+            discounttotal: discounttotal.toFixed(2),
+            saleswdiscount: saleswdiscount.toFixed(2),
+            taxtotal: taxtotal.toFixed(2),
+            taxedsales: taxedsales.toFixed(2)
+          });
+        } else {
+          setdailyReportDisplay({
+            ...dailyReportDisplay,
+            accountID: authentication.user.accountID,
+            deviceID: settings.deviceID
+          });
+          dispatchnewalert(dispatch, 'warning', 'No records to generate yet');
+        }
+      } catch (error) {
+        console.error(error);
+        dispatchnewalert(dispatch, 'error', 'Error making request to generate report');
+      }
+    };
     getDailyReportProcess();
   }, []);
 

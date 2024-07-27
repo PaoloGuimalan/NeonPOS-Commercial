@@ -2,10 +2,9 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
 import { UserAccount } from '../../../lib/typings/Auth';
-import { Authentication, Settings } from '../../../lib/typings/Auth';
+import { Authentication } from '../../../lib/typings/Auth';
 
 import { RootState } from '../../../redux/store/store';
-import Button from '../button/Button';
 import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import RemoveUser from './RemoveUser';
