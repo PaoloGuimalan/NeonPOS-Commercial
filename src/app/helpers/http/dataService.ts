@@ -13,8 +13,8 @@ export const client = axios.create({
 const BASEURL = CONFIG as CONFIGURATION;
 
 class DataService {
-  static get(path = '', type: URLTYPE = 'BACKDOOR') {
-    return client({
+  static get<T = any>(path = '', type: URLTYPE = 'BACKDOOR') {
+    return client<T>({
       method: 'GET',
       baseURL: BASEURL[type],
       url: path,

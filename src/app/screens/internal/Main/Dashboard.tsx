@@ -15,7 +15,7 @@ function Dashboard() {
   const settings: Settings = useSelector((state: RootState) => state.settings);
   const dispatch = useDispatch();
 
-  const [dailyReportDisplay, setdailyReportDisplay] = useState<DailyReport>(staticDailyReport);
+  const [dailyReportDisplay, setDailyReportDisplay] = useState<DailyReport>(staticDailyReport);
 
   const PrintDailyReportProcess = async () => {
     try {
@@ -53,7 +53,7 @@ function Dashboard() {
           result?.[0] || {};
 
         if (result.length > 0) {
-          setdailyReportDisplay({
+          setDailyReportDisplay({
             accountID: authentication.user.accountID,
             deviceID: settings.deviceID,
             dateMade: dateMade,
@@ -66,7 +66,7 @@ function Dashboard() {
             taxedsales: taxedsales.toFixed(2)
           });
         } else {
-          setdailyReportDisplay({
+          setDailyReportDisplay({
             ...dailyReportDisplay,
             accountID: authentication.user.accountID,
             deviceID: settings.deviceID

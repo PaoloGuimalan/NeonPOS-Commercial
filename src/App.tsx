@@ -15,6 +15,7 @@ import BACKDOOR from './app/lib/endpoints/Backdoor';
 import WelcomeBanner from './app/reusables/holders/WelcomeBanner';
 import { AlertItem } from './app/lib/typings/Notifications';
 import { Account, Main, Users, Dashboard, Inventory, Permissions } from './app/screens/internal/Main';
+import Orders from './app/screens/internal/Main/Orders';
 
 function App() {
   const authentication: Authentication = useSelector((state: RootState) => state.authentication);
@@ -134,6 +135,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="inventory" element={<Inventory />} />
           <Route path="permissions" element={<Permissions />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="users" element={<Users />} />
           <Route path="account" element={<Account />} />
         </Route>

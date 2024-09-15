@@ -1,8 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchnewalert } from '../../../helpers/utils/alertdispatching';
-import { UserAccount } from '../../../lib/typings/Auth';
-import { Authentication } from '../../../lib/typings/Auth';
+import { UserAccount, Authentication } from '../../../lib/typings/Auth';
 
 import { RootState } from '../../../redux/store/store';
 import { DataService } from '../../../helpers/http/dataService';
@@ -11,27 +10,27 @@ import RemoveUser from './RemoveUser';
 
 type Props = {
   mp: UserAccount;
-  setUpdateUsers: Dispatch<SetStateAction<boolean>>;
+  setRefetch: Dispatch<SetStateAction<boolean>>;
 };
 
-function User({ mp, setUpdateUsers }: Props) {
+function User({ mp, setRefetch }: Readonly<Props>) {
   const authentication: Authentication = useSelector((state: RootState) => state.authentication);
   const dispatch = useDispatch();
 
-  const [isRemovingUser, setisRemovingUser] = useState<boolean>(false);
+  const [isRemovingUser, setIsRemovingUser] = useState<boolean>(false);
 
   const RemoveUserProcess = async () => {
     try {
-      setisRemovingUser(true);
+      setIsRemovingUser(true);
       const response = await DataService.delete(BACKDOOR.REMOVE_USER(mp.accountID));
 
-      setUpdateUsers((prev) => !prev);
+      setRefetch((prev) => !prev);
       dispatchnewalert(dispatch, 'success', response.data.message);
     } catch (err) {
       console.log(err);
       dispatchnewalert(dispatch, 'error', 'Failed to delete user. Please try again!');
     } finally {
-      setisRemovingUser(false);
+      setIsRemovingUser(false);
     }
   };
 

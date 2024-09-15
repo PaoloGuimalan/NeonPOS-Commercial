@@ -1,50 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Settings, Permission } from '../../../lib/typings/Auth';
 import { useSelector } from 'react-redux';
 import Pageloader from '../../../reusables/loaders/Pageloader';
 import PermissionItem from '../../../reusables/widgets/PermissionItem';
-import { DataService } from '../../../helpers/http/dataService';
 import BACKDOOR from '../../../lib/endpoints/Backdoor';
 import { Empty } from '../../../reusables/components';
 import CreatePermission from '../../../reusables/components/permissions/CreatePermission';
 import { RootState } from '../../../redux/store/store';
+import { useFetchData } from '../../../hooks/useFetchData';
 
 function Permissions() {
   const settings: Settings = useSelector((state: RootState) => state.settings);
-
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [refetch, setRefetch] = useState<boolean>(false);
-
-  const GetPermissionsProcess = async () => {
-    try {
-      const response = await DataService.get(BACKDOOR.GET_PERMISSIONS);
-      const { result } = response.data || {};
-      setPermissions(result);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data, isLoading, setRefetch } = useFetchData<Permission, any>(BACKDOOR.GET_PERMISSIONS);
 
   const renderPermissions = () => {
     if (isLoading) {
       return <Pageloader className="my-5" />;
     }
 
-    if (!permissions.length) {
+    if (!data?.length) {
       return <Empty size="w-20" title="NO Permissions" />;
     }
 
-    return permissions.map((permission: Permission) => {
+    return data?.map((permission: Permission) => {
       return <PermissionItem key={permission.permissionID} permission={permission} setRefetch={setRefetch} />;
     });
   };
 
   useEffect(() => {
-    GetPermissionsProcess();
-  }, [settings, setRefetch, refetch]);
+    setRefetch((prev) => !prev);
+  }, [settings, setRefetch]);
 
   return (
     <div className="w-full flex flex-row bg-shade font-Inter">
